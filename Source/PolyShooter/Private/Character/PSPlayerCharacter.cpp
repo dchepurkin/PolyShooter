@@ -11,10 +11,16 @@ APSPlayerCharacter::APSPlayerCharacter(const FObjectInitializer& ObjectInitializ
 {
 	PrimaryActorTick.bCanEverTick = false;
 
-	CameraComponent = CreateDefaultSubobject<UCameraComponent>("CameraComponent");
-	CameraComponent->SetupAttachment(GetRootComponent());
+	GetMesh()->bOwnerNoSee = false;
 
-	GetMesh()->SetCastShadow(false);
+	CameraComponent = CreateDefaultSubobject<UCameraComponent>("PlayerCamera");
+	CameraComponent->SetupAttachment(GetRootComponent());
+	CameraComponent->bUsePawnControlRotation = true;
+
+	FirstPersonMeshComponent = CreateDefaultSubobject<USkeletalMeshComponent>("FirstPersonMesh");
+	FirstPersonMeshComponent->SetupAttachment(CameraComponent);
+	FirstPersonMeshComponent->SetCastShadow(false);
+	FirstPersonMeshComponent->bOnlyOwnerSee = true;
 }
 
 void APSPlayerCharacter::BeginPlay()
@@ -39,16 +45,10 @@ void APSPlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputC
 
 void APSPlayerCharacter::MoveForward(float AxisValue)
 {
-	const auto MovementComponent = FindComponentByClass<UPSPlayerMovementComponent>();
-	if(!MovementComponent) return;
-
-	MovementComponent->MoveForward(AxisValue);
+	AddMovementInput(GetActorForwardVector(), AxisValue);
 }
 
 void APSPlayerCharacter::MoveRight(float AxisValue)
 {
-	const auto MovementComponent = FindComponentByClass<UPSPlayerMovementComponent>();
-	if(!MovementComponent) return;
-
-	MovementComponent->MoveRight(AxisValue);
+	AddMovementInput(GetActorRightVector(), AxisValue);
 }

@@ -6,6 +6,8 @@
 #include "GameFramework/Character.h"
 #include "PSCharacterBase.generated.h"
 
+class UPSHealthComponent;
+
 UCLASS()
 class POLYSHOOTER_API APSCharacterBase : public ACharacter
 {
@@ -16,7 +18,11 @@ public:
 
 	virtual void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) override;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category=Components)
+	UPSHealthComponent* HealthComponent;
+
 protected:
 	virtual void BeginPlay() override;
-
+	
+	void OnDeath();
 };

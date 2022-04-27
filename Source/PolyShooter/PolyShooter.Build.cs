@@ -8,14 +8,18 @@ public class PolyShooter : ModuleRules
 	{
 		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
 
-		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore" });
+		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "UMG" });
 
 		PrivateDependencyModuleNames.AddRange(new string[] { });
 
 		PublicIncludePaths.AddRange(new string[]
 		{
 			"PolyShooter/Public",
-			"PolyShooter/Public/Character"
+			"PolyShooter/Public/Character",
+			"PolyShooter/Public/Components",
+			"PolyShooter/Public/UI",
+			"PolyShooter/Public/Animation",
+			"PolyShooter/Public/Dev",
 		});
 
 		// Uncomment if you are using Slate UI

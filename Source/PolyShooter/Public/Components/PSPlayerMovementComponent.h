@@ -10,8 +10,4 @@ UCLASS()
 class POLYSHOOTER_API UPSPlayerMovementComponent : public UCharacterMovementComponent
 {
 	GENERATED_BODY()
-
-public:
-	void MoveForward(float AxisValue) const;
-	void MoveRight(float AxisValue) const;
 };

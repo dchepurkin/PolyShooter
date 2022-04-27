@@ -22,6 +22,9 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category=Components)
 	UCameraComponent* CameraComponent;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category=Components)
+	USkeletalMeshComponent* FirstPersonMeshComponent;
+
 	virtual void BeginPlay() override;
 
 private:
