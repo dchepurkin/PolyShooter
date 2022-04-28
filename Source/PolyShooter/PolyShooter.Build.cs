@@ -20,6 +20,7 @@ public class PolyShooter : ModuleRules
 			"PolyShooter/Public/UI",
 			"PolyShooter/Public/Animation",
 			"PolyShooter/Public/Dev",
+			"PolyShooter/Public/Weapon",
 		});
 
 		// Uncomment if you are using Slate UI

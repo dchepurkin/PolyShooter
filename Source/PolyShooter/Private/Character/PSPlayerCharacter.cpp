@@ -1,6 +1,9 @@
 // PolyShooter By DChepurkin
 
 #include "Character/PSPlayerCharacter.h"
+
+#include "PSHealthComponent.h"
+#include "PSWeaponComponent.h"
 #include "Camera/CameraComponent.h"
 #include "Components/PSPlayerMovementComponent.h"
 
@@ -11,7 +14,7 @@ APSPlayerCharacter::APSPlayerCharacter(const FObjectInitializer& ObjectInitializ
 {
 	PrimaryActorTick.bCanEverTick = false;
 
-	GetMesh()->bOwnerNoSee = false;
+	GetMesh()->bOwnerNoSee = true;
 
 	CameraComponent = CreateDefaultSubobject<UCameraComponent>("PlayerCamera");
 	CameraComponent->SetupAttachment(GetRootComponent());
@@ -21,6 +24,8 @@ APSPlayerCharacter::APSPlayerCharacter(const FObjectInitializer& ObjectInitializ
 	FirstPersonMeshComponent->SetupAttachment(CameraComponent);
 	FirstPersonMeshComponent->SetCastShadow(false);
 	FirstPersonMeshComponent->bOnlyOwnerSee = true;
+
+	WeaponComponent = CreateDefaultSubobject<UPSWeaponComponent>("WeaponComponent");
 }
 
 void APSPlayerCharacter::BeginPlay()
@@ -28,6 +33,8 @@ void APSPlayerCharacter::BeginPlay()
 	Super::BeginPlay();
 
 	check(CameraComponent);
+	check(FirstPersonMeshComponent);
+	check(WeaponComponent);
 }
 
 void APSPlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
@@ -41,14 +48,33 @@ void APSPlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputC
 	PlayerInputComponent->BindAxis("TurnAround", this, &APSPlayerCharacter::AddControllerYawInput);
 
 	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &APSPlayerCharacter::Jump);
+	PlayerInputComponent->BindAction("Run", IE_Pressed, this, &APSPlayerCharacter::OnStartRun);
+	PlayerInputComponent->BindAction("Run", IE_Released, this, &APSPlayerCharacter::OnStopRun);
 }
 
 void APSPlayerCharacter::MoveForward(float AxisValue)
 {
+	IsMovingForward = AxisValue > 0.0f;
 	AddMovementInput(GetActorForwardVector(), AxisValue);
 }
 
 void APSPlayerCharacter::MoveRight(float AxisValue)
 {
 	AddMovementInput(GetActorRightVector(), AxisValue);
+}
+
+void APSPlayerCharacter::OnStartRun()
+{
+	if(!HealthComponent || HealthComponent->IsDead()) return;
+	WantsToRun = true;
+}
+
+void APSPlayerCharacter::OnStopRun()
+{
+	WantsToRun = false;
+}
+
+bool APSPlayerCharacter::IsRunning() const
+{
+	return WantsToRun && IsMovingForward;
 }

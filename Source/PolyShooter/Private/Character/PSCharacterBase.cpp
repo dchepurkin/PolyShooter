@@ -1,6 +1,8 @@
 // PolyShooter By DChepurkin
 
 #include "Character/PSCharacterBase.h"
+
+#include "Components/CapsuleComponent.h"
 #include "Components/PSHealthComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 
@@ -16,6 +18,8 @@ void APSCharacterBase::BeginPlay()
 {
 	Super::BeginPlay();
 
+	check(HealthComponent);
+
 	if(HealthComponent)
 	{
 		HealthComponent->OnDeath.AddUObject(this, &APSCharacterBase::OnDeath);
@@ -29,7 +33,10 @@ void APSCharacterBase::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 
 void APSCharacterBase::OnDeath()
 {
-	if(!GetCharacterMovement()) return;
+	if(!GetCharacterMovement() || !GetMesh() || !GetCapsuleComponent()) return;
 
+	GetMesh()->SetSimulatePhysics(true);
+	GetCapsuleComponent()->SetCollisionResponseToAllChannels(ECR_Ignore);	
 	GetCharacterMovement()->DisableMovement();
+	
 }
