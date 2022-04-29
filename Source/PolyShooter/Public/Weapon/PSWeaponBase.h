@@ -17,6 +17,10 @@ class POLYSHOOTER_API APSWeaponBase : public AActor
 public:
 	APSWeaponBase();
 
+	const FWeaponAnimData& GetWeaponAnimData() const { return WeaponAnimData; }
+	const FWeaponData& GetWeaponData() const { return WeaponData; }
+	void SetVisibility(bool Visible) const;
+
 protected:
 	virtual void BeginPlay() override;
 
@@ -33,5 +37,11 @@ protected:
 	float FireRate = 0.1f;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category=PSWeaponBase)
+	FWeaponData WeaponData;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category=PSWeaponBase)
 	FAmmoData AmmoData;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category=PSWeaponBase)
+	FWeaponAnimData WeaponAnimData;
 };

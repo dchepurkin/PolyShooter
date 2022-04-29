@@ -18,8 +18,9 @@ public:
 	APSPlayerCharacter(const FObjectInitializer& ObjectInitializer);
 
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+	virtual USkeletalMeshComponent* GetMainMesh() const override { return FirstPersonMeshComponent; }
 
-	bool IsRunning() const;
+	virtual bool IsRunning() const override;
 
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category=Components)

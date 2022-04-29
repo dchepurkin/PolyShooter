@@ -40,3 +40,4 @@ void APSCharacterBase::OnDeath()
 	GetCharacterMovement()->DisableMovement();
 	
 }
+

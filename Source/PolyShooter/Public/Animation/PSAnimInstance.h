@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Animation/AnimInstance.h"
+#include "PSCoreTypes.h"
 #include "PSAnimInstance.generated.h"
 
 class APSCharacterBase;
@@ -20,13 +21,21 @@ public:
 protected:
 	UPROPERTY(BlueprintReadOnly, Category=PSAnimInstance)
 	float Velocity = 0.0f;
-	
+
 	UPROPERTY(BlueprintReadOnly, Category=PSAnimInstance)
-	bool IsJump = false;
-	
+	bool IsJumping = false;
+
+	UPROPERTY(BlueprintReadOnly, Category=PSAnimInstance)
+	bool IsRuning = false;
+
+	UPROPERTY(BlueprintReadOnly, Category=PSAnimInstance)
+	FWeaponAnimData WeaponAnimData;
+
 private:
 	UPROPERTY()
 	APSCharacterBase* Character;
 
 	bool GetIsJump() const;
+	void GetWeaponAnimData(FWeaponAnimData& Data) const;
+	bool GetIsRuning() const;
 };

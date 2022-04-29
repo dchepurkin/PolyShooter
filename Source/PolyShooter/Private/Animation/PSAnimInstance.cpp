@@ -2,6 +2,8 @@
 
 #include "Animation/PSAnimInstance.h"
 #include "PSCharacterBase.h"
+#include "PSWeaponBase.h"
+#include "PSWeaponComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 
 void UPSAnimInstance::NativeInitializeAnimation()
@@ -18,7 +20,9 @@ void UPSAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 	if(!Character) return;
 
 	Velocity = Character->GetVelocity().Length();
-	IsJump = GetIsJump();
+	IsJumping = GetIsJump();
+	IsRuning = GetIsRuning();
+	GetWeaponAnimData(WeaponAnimData);
 }
 
 bool UPSAnimInstance::GetIsJump() const
@@ -26,7 +30,21 @@ bool UPSAnimInstance::GetIsJump() const
 	if(!Character) return false;
 
 	const auto MovementComponent = Character->GetCharacterMovement();
-	if(!MovementComponent) return false;
 
-	return MovementComponent->IsFalling();
+	return MovementComponent && MovementComponent->IsFalling();
+}
+
+void UPSAnimInstance::GetWeaponAnimData(FWeaponAnimData& Data) const
+{
+	if(!Character) return;
+
+	const auto WeaponComponent = Character->FindComponentByClass<UPSWeaponComponent>();
+	if(!WeaponComponent || !WeaponComponent->GetCurrentWeapon()) return;
+
+	Data = WeaponComponent->GetCurrentWeapon()->GetWeaponAnimData();
+}
+
+bool UPSAnimInstance::GetIsRuning() const
+{
+	return Character && Character->IsRunning();
 }
