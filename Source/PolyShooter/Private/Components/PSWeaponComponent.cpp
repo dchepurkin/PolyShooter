@@ -4,6 +4,7 @@
 
 #include "PSCharacterBase.h"
 #include "PSEndEquipAnimNotify.h"
+#include "PSEndReloadAnimNotify.h"
 #include "PSWeaponBase.h"
 #include "PSUtils.h"
 
@@ -20,6 +21,18 @@ void UPSWeaponComponent::BeginPlay()
 
 	SpawnWeapons();
 	SetCurrentWeapon(0);
+}
+
+void UPSWeaponComponent::EndPlay(const EEndPlayReason::Type EndPlayReason)
+{
+	CurrentWeapon = nullptr;
+	for(const auto Weapon : Weapons)
+	{
+		Weapon->DetachFromActor(FDetachmentTransformRules::KeepRelativeTransform);
+		Weapon->Destroy();
+	}
+	Weapons.Empty();
+	Super::EndPlay(EndPlayReason);
 }
 
 void UPSWeaponComponent::AddWeapon(APSWeaponBase* NewWeapon)
@@ -50,17 +63,33 @@ void UPSWeaponComponent::SpawnNewWeapon(TSubclassOf<APSWeaponBase> WeaponClass)
 	Weapon->AttachToComponent(CharacterBase->GetMainMesh(), AttachmentRules, Weapon->GetWeaponData().AttachSocketName);
 	Weapon->SetOwner(CharacterBase);
 
-	const auto Notify = PSUtils::FindFirstNotify<UPSEndEquipAnimNotify>(Weapon->GetWeaponAnimData().EquipAnimMontage);
-	if(Notify) Notify->OnEquipFinished.AddUObject(this, &UPSWeaponComponent::OnEquipFinished);
+	Weapon->OnClipEmpty.AddUObject(this, &UPSWeaponComponent::OnClipEmpty);
+
+	const auto EquipFinishedNotify = PSUtils::FindFirstNotify<UPSEndEquipAnimNotify>(
+		Weapon->GetWeaponAnimData().EquipAnimMontage);
+	if(EquipFinishedNotify) EquipFinishedNotify->OnEquipFinished.AddUObject(this, &UPSWeaponComponent::OnEquipFinished);
+
+	const auto ReloadFinishedNotify = PSUtils::FindFirstNotify<UPSEndReloadAnimNotify>(
+		Weapon->GetWeaponAnimData().ReloadAnimMontage);
+	if(ReloadFinishedNotify)
+		ReloadFinishedNotify->OnReloadFinished.AddUObject(
+			this, &UPSWeaponComponent::OnReloadFinished);
 
 	AddWeapon(Weapon);
 }
 
 bool UPSWeaponComponent::SetCurrentWeapon(int32 WeaponIndex)
 {
-	if(Weapons.IsEmpty() || WeaponIndex > Weapons.Num() - 1) return false;
+	if(Weapons.IsEmpty() ||
+		WeaponIndex > Weapons.Num() - 1 ||
+		CurrentWeapon == Weapons[WeaponIndex])
+		return false;
 
-	if(CurrentWeapon) CurrentWeapon->SetVisibility(false);
+	if(CurrentWeapon)
+	{
+		StopFire();
+		CurrentWeapon->SetVisibility(false);
+	}
 
 	CurrentWeapon = Weapons[WeaponIndex];
 	if(!CurrentWeapon) return false;
@@ -82,7 +111,8 @@ bool UPSWeaponComponent::CanEquip()
 {
 	const auto Character = GetOwner<APSCharacterBase>();
 
-	return !IsEquiping && Character && !Character->IsRunning();
+	return CurrentWeapon && !IsEquiping && !IsReloading && Character && !Character->IsRunning() &&
+		!CurrentWeapon->IsFire();
 }
 
 void UPSWeaponComponent::OnEquipFinished(USkeletalMeshComponent* MeshComponent)
@@ -91,4 +121,66 @@ void UPSWeaponComponent::OnEquipFinished(USkeletalMeshComponent* MeshComponent)
 	{
 		IsEquiping = false;
 	}
+}
+
+void UPSWeaponComponent::OnReloadFinished(USkeletalMeshComponent* MeshComponent)
+{
+	if(GetOwner<APSCharacterBase>() && GetOwner<APSCharacterBase>()->GetMainMesh() == MeshComponent)
+	{
+		IsReloading = false;
+	}
+}
+
+void UPSWeaponComponent::StartFire()
+{
+	if(!CanFire()) return;
+
+	CurrentWeapon->StartFire();
+}
+
+void UPSWeaponComponent::StopFire()
+{
+	if(!CurrentWeapon) return;
+
+	CurrentWeapon->StopFire();
+}
+
+bool UPSWeaponComponent::CanFire()
+{
+	return CurrentWeapon && !IsEquiping && !IsReloading;
+}
+
+void UPSWeaponComponent::OnClipEmpty(APSWeaponBase* EmptyWeapon)
+{
+	if(!EmptyWeapon) return;
+	if(CurrentWeapon != EmptyWeapon) EmptyWeapon->ChangeClip();
+
+	StopFire();
+	ChangeClip();
+}
+
+void UPSWeaponComponent::ChangeClip()
+{
+	if(!CanReload()) return;
+
+	IsReloading = true;
+	PSUtils::PlayMontage(GetOwner(), CurrentWeapon->GetWeaponAnimData().ReloadAnimMontage);
+	CurrentWeapon->ChangeClip();
+}
+
+bool UPSWeaponComponent::CanReload()
+{
+	return CurrentWeapon && !IsEquiping && !IsReloading && CurrentWeapon->CanReload();
+}
+
+void UPSWeaponComponent::GetAmmoData(FAmmoData& AmmoData) const
+{
+	if(!CurrentWeapon) return;
+	AmmoData = CurrentWeapon->GetAmmoData();
+}
+
+void UPSWeaponComponent::GetAnimData(FWeaponAnimData& AnimData) const
+{
+	if(!CurrentWeapon) return;
+	AnimData = CurrentWeapon->GetWeaponAnimData();
 }

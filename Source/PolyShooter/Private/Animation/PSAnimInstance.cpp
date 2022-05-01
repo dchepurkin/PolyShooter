@@ -34,14 +34,14 @@ bool UPSAnimInstance::GetIsJump() const
 	return MovementComponent && MovementComponent->IsFalling();
 }
 
-void UPSAnimInstance::GetWeaponAnimData(FWeaponAnimData& Data) const
+void UPSAnimInstance::GetWeaponAnimData(FWeaponAnimData& AnimData) const
 {
 	if(!Character) return;
 
 	const auto WeaponComponent = Character->FindComponentByClass<UPSWeaponComponent>();
-	if(!WeaponComponent || !WeaponComponent->GetCurrentWeapon()) return;
+	if(!WeaponComponent) return;
 
-	Data = WeaponComponent->GetCurrentWeapon()->GetWeaponAnimData();
+	WeaponComponent->GetAnimData(AnimData);
 }
 
 bool UPSAnimInstance::GetIsRuning() const

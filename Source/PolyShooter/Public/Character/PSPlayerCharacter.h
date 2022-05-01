@@ -19,6 +19,7 @@ public:
 
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 	virtual USkeletalMeshComponent* GetMainMesh() const override { return FirstPersonMeshComponent; }
+	virtual void Jump() override;
 
 	virtual bool IsRunning() const override;
 
@@ -33,6 +34,7 @@ protected:
 	UPSWeaponComponent* WeaponComponent;
 
 	virtual void BeginPlay() override;
+	virtual void OnDeath() override;
 
 private:
 	bool WantsToRun = false;
@@ -41,6 +43,9 @@ private:
 	void MoveForward(float AxisValue);
 	void MoveRight(float AxisValue);
 
-	void OnStartRun();
-	void OnStopRun();
+	void StartRun();
+	void StopRun();
+
+	void StartFire();
+	void StopFire();
 };

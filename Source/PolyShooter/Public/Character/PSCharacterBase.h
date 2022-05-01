@@ -27,5 +27,5 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category=Components)
 	UPSHealthComponent* HealthComponent;
 
-	void OnDeath();
+	virtual void OnDeath();
 };

@@ -8,7 +8,8 @@ public:
 	static void PlayMontage(AActor* Actor, UAnimMontage* Montage)
 	{
 		const auto Character = Cast<APSCharacterBase>(Actor);
-		if(!Character ||
+		if(!Montage ||
+			!Character ||
 			!Character->GetMainMesh() ||
 			!Character->GetMainMesh()->GetAnimInstance())
 			return;
@@ -16,13 +17,15 @@ public:
 		Character->GetMainMesh()->GetAnimInstance()->Montage_Play(Montage);
 	}
 
-	template<class T>
-	static UPSEndEquipAnimNotify* FindFirstNotify(const UAnimMontage* AnimMontage)
+	template <class T>
+	static T* FindFirstNotify(const UAnimMontage* AnimMontage)
 	{
+		if(!AnimMontage) return nullptr;
+		
 		const auto& Notifies = AnimMontage->Notifies;
-		for(const auto& NotifyEvent:Notifies)
+		for(const auto& NotifyEvent : Notifies)
 		{
-			if(const auto Notify =  Cast<T>(NotifyEvent.Notify)) return Notify;			
+			if(const auto Notify = Cast<T>(NotifyEvent.Notify)) return Notify;
 		}
 		return nullptr;
 	}

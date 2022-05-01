@@ -36,6 +36,6 @@ private:
 	APSCharacterBase* Character;
 
 	bool GetIsJump() const;
-	void GetWeaponAnimData(FWeaponAnimData& Data) const;
+	void GetWeaponAnimData(FWeaponAnimData& AnimData) const;
 	bool GetIsRuning() const;
 };
