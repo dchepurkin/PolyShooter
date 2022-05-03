@@ -10,7 +10,9 @@ UCLASS()
 class POLYSHOOTER_API APSAutoShotWeapon : public APSBulletWeapon
 {
 	GENERATED_BODY()
-
+public:
+	virtual void OutMagazine() override;
+	
 protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category=PSWeaponBase, meta=(ClampMin = "0.01"))
 	float FireRate = 0.1f;

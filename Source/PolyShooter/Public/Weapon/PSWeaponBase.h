@@ -7,6 +7,7 @@
 #include "PSCoreTypes.h"
 #include "PSWeaponBase.generated.h"
 
+class APSMagazineBase;
 class UStaticMeshComponent;
 class APSWeaponBase;
 
@@ -28,20 +29,29 @@ public:
 
 	virtual void StartFire();
 	virtual void StopFire();
-	virtual bool IsFire() { return false; }
+	virtual bool IsFire() { return FireInProgress; }
 
 	bool IsAmmoEmpty();
 	bool IsClipEmpty();
 	bool CanReload();
 
-	void SetVisibility(bool Visible) const;
+	virtual void SetVisibility(bool Visible);
 	void ChangeClip();
+
+	virtual void StartSetupMagazine();
+	virtual void EndSetupMagazine();
+	virtual void OutMagazine();
+
+	void AddClips(int32 ClipsAmount);
 
 protected:
 	virtual void BeginPlay() override;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category=PSWeaponBase)
 	UStaticMeshComponent* WeaponMesh;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category=PSWeaponBase)
+	UStaticMeshComponent* MagazineMesh;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category=PSWeaponBase, meta=(ClampMin = "0.0"))
 	float Damage = 10.0f;
@@ -61,12 +71,21 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category=PSWeaponBase)
 	FWeaponAnimData WeaponAnimData;
 
+	UPROPERTY()
+	APSMagazineBase* Magazine;
+
+	bool FireInProgress = false;
+
 	bool CanFire();
 	bool GetTraceData(FVector& StartTrace, FVector& EndTrace);
 	void FireLineTrace(FHitResult& HitResult, const FVector& StartTrace, const FVector& EndTrace);
 
 	virtual void MakeShot();
 	virtual void OnFireAnimFinished(USkeletalMeshComponent* MeshComponent);
+
+	void SetMagazineVisible(bool Visibility);
+	void SpawnMagazine(const FName& SocketName);
+	UStaticMesh* GetMagazineMesh();
 
 private:
 	FAmmoData AmmoData;

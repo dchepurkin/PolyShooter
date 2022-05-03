@@ -2,6 +2,8 @@
 
 #include "Weapon/PSSingleShotWeapon.h"
 
+#include "PSMagazineBase.h"
+
 void APSSingleShotWeapon::StartFire()
 {
 	if(!CanFire()) return;
@@ -13,6 +15,6 @@ void APSSingleShotWeapon::StartFire()
 
 void APSSingleShotWeapon::OnFireAnimFinished(USkeletalMeshComponent* MeshComponent)
 {
-	Super::OnFireAnimFinished(MeshComponent);
 	FireInProgress = false;
+	Super::OnFireAnimFinished(MeshComponent);	
 }

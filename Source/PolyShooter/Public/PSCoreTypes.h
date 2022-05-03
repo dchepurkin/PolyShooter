@@ -30,9 +30,6 @@ struct FWeaponAnimData
 	GENERATED_BODY()
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category=Weapon)
-	UAnimSequence* IdleSequence = nullptr;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category=Weapon)
 	UBlendSpace1D* IdleWalkBlendSpace = nullptr;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category=Weapon)
@@ -57,5 +54,11 @@ struct FWeaponData
 	FName AttachSocketName = "WeaponSocket";
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category=Weapon)
-	FName MuzzleSocketName = "MuzzleSocket";	
+	FName MuzzleSocketName = "MuzzleSocket";
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category=Weapon)
+	FName MagazineInSocketName = "MagazineSocket";
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category=Weapon)
+	FName MagazineOutSocketName = "MagazineSocket";	
 };

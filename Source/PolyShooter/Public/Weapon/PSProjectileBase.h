@@ -17,6 +17,8 @@ class POLYSHOOTER_API APSProjectileBase : public AActor
 public:
 	APSProjectileBase();
 
+	void SetDirection(const FVector& Direction);
+
 protected:
 	virtual void BeginPlay() override;
 
@@ -38,13 +40,19 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category=PSProjectile)
 	bool DoFullDamage = false;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category=PSProjectile)
+	bool IgnoreDamageSelf = false;
+
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category=PSProjectile, meta=(ClampMin = "1.0"))
 	float LifeTime = 5.0f;
 
 private:
+	FVector ShotDirection = FVector::ZeroVector;
+	
 	UFUNCTION()
-	void OnBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp,
-	                    int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+	void OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp,
+	                    FVector NormalImpulse, const FHitResult& Hit);
 
-	void MakeDamage(AActor* DamagedActor);
+	void MakeDamage();
+	AController* GetController() const;	
 };

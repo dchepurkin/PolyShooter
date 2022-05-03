@@ -63,13 +63,19 @@ void UPSHealthComponent::SetAutoHealTimer(const bool Enabled)
 	if(!AutoHealEnabled || IsDead() || !GetWorld()) return;
 
 	Enabled
-		? GetWorld()->GetTimerManager().SetTimer(AutoHealTimerHandle, this, &UPSHealthComponent::AutoHeal,
-		                                         AutoHealRate, true, AutoHealDelay)
+		? GetWorld()->GetTimerManager().SetTimer(AutoHealTimerHandle, this, &UPSHealthComponent::AutoHeal, AutoHealRate,
+		                                         true, AutoHealDelay)
 		: GetWorld()->GetTimerManager().ClearTimer(AutoHealTimerHandle);
 }
 
 void UPSHealthComponent::AutoHeal()
 {
-	SetHealth(Health + AutoHealAmount);
+	MakeHeal(AutoHealAmount);
 	if(FMath::IsNearlyEqual(Health, MaxHealth)) SetAutoHealTimer(false);
+}
+
+void UPSHealthComponent::MakeHeal(const float HealthAmount)
+{
+	if(FMath::IsNearlyZero(HealthAmount)) return;
+	SetHealth(Health + HealthAmount);
 }

@@ -49,8 +49,7 @@ void APSPlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputC
 	PlayerInputComponent->BindAxis("MoveRight", this, &APSPlayerCharacter::MoveRight);
 	PlayerInputComponent->BindAxis("LookUp", this, &APSPlayerCharacter::AddControllerPitchInput);
 	PlayerInputComponent->BindAxis("TurnAround", this, &APSPlayerCharacter::AddControllerYawInput);
-
-	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &APSPlayerCharacter::Jump);
+	
 	PlayerInputComponent->BindAction("Run", IE_Pressed, this, &APSPlayerCharacter::StartRun);
 	PlayerInputComponent->BindAction("Run", IE_Released, this, &APSPlayerCharacter::StopRun);
 	PlayerInputComponent->BindAction("Fire", IE_Pressed, this, &APSPlayerCharacter::StartFire);
@@ -58,20 +57,20 @@ void APSPlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputC
 	PlayerInputComponent->BindAction("Reload", IE_Pressed, WeaponComponent, &UPSWeaponComponent::ChangeClip);
 
 	DECLARE_DELEGATE_OneParam(FOnChangeWeaponSignature, int32);
-	PlayerInputComponent->BindAction<FOnChangeWeaponSignature>("Weapon1", IE_Pressed, WeaponComponent, &UPSWeaponComponent::EquipWeapon, 0);
-	PlayerInputComponent->BindAction<FOnChangeWeaponSignature>("Weapon2", IE_Pressed, WeaponComponent, &UPSWeaponComponent::EquipWeapon, 1);
-	PlayerInputComponent->BindAction<FOnChangeWeaponSignature>("Weapon3", IE_Pressed, WeaponComponent, &UPSWeaponComponent::EquipWeapon, 2);
-	PlayerInputComponent->BindAction<FOnChangeWeaponSignature>("Weapon4", IE_Pressed, WeaponComponent, &UPSWeaponComponent::EquipWeapon, 3);
-	PlayerInputComponent->BindAction<FOnChangeWeaponSignature>("Weapon5", IE_Pressed, WeaponComponent, &UPSWeaponComponent::EquipWeapon, 4);
-	PlayerInputComponent->BindAction<FOnChangeWeaponSignature>("Weapon6", IE_Pressed, WeaponComponent, &UPSWeaponComponent::EquipWeapon, 5);
-	PlayerInputComponent->BindAction<FOnChangeWeaponSignature>("Weapon7", IE_Pressed, WeaponComponent, &UPSWeaponComponent::EquipWeapon, 6);
-}
-
-void APSPlayerCharacter::Jump()
-{
-	Super::Jump();
-
-	StopFire();
+	PlayerInputComponent->BindAction<FOnChangeWeaponSignature>("Weapon1", IE_Pressed, WeaponComponent,
+	                                                           &UPSWeaponComponent::EquipWeapon, 0);
+	PlayerInputComponent->BindAction<FOnChangeWeaponSignature>("Weapon2", IE_Pressed, WeaponComponent,
+	                                                           &UPSWeaponComponent::EquipWeapon, 1);
+	PlayerInputComponent->BindAction<FOnChangeWeaponSignature>("Weapon3", IE_Pressed, WeaponComponent,
+	                                                           &UPSWeaponComponent::EquipWeapon, 2);
+	PlayerInputComponent->BindAction<FOnChangeWeaponSignature>("Weapon4", IE_Pressed, WeaponComponent,
+	                                                           &UPSWeaponComponent::EquipWeapon, 3);
+	PlayerInputComponent->BindAction<FOnChangeWeaponSignature>("Weapon5", IE_Pressed, WeaponComponent,
+	                                                           &UPSWeaponComponent::EquipWeapon, 4);
+	PlayerInputComponent->BindAction<FOnChangeWeaponSignature>("Weapon6", IE_Pressed, WeaponComponent,
+	                                                           &UPSWeaponComponent::EquipWeapon, 5);
+	PlayerInputComponent->BindAction<FOnChangeWeaponSignature>("Weapon7", IE_Pressed, WeaponComponent,
+	                                                           &UPSWeaponComponent::EquipWeapon, 6);
 }
 
 void APSPlayerCharacter::MoveForward(float AxisValue)

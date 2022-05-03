@@ -16,13 +16,13 @@ class POLYSHOOTER_API APSCharacterBase : public ACharacter
 public:
 	APSCharacterBase(const FObjectInitializer& ObjectInitializer);
 
-	virtual void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) override;	
+	virtual void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) override;
 
 	virtual USkeletalMeshComponent* GetMainMesh() const { return GetMesh(); }
-	virtual bool IsRunning() const { return false; }
+	virtual bool IsRunning() const { return false; }	
 
 protected:
-	virtual void BeginPlay() override;
+	virtual void BeginPlay() override;	
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category=Components)
 	UPSHealthComponent* HealthComponent;

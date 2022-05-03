@@ -36,8 +36,7 @@ void APSCharacterBase::OnDeath()
 	if(!GetCharacterMovement() || !GetMesh() || !GetCapsuleComponent()) return;
 
 	GetMesh()->SetSimulatePhysics(true);
-	GetCapsuleComponent()->SetCollisionResponseToAllChannels(ECR_Ignore);	
+	GetCapsuleComponent()->SetCollisionResponseToAllChannels(ECR_Ignore);
 	GetCharacterMovement()->DisableMovement();
-	
 }
 

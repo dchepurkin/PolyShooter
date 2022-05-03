@@ -16,8 +16,6 @@ public:
 
 protected:
 	virtual void StartFire() override;
+	virtual void StopFire() override {};
 	virtual void OnFireAnimFinished(USkeletalMeshComponent* MeshComponent) override;
-
-private:
-	bool FireInProgress = false;
 };

@@ -19,7 +19,6 @@ public:
 
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 	virtual USkeletalMeshComponent* GetMainMesh() const override { return FirstPersonMeshComponent; }
-	virtual void Jump() override;
 
 	virtual bool IsRunning() const override;
 
@@ -29,6 +28,9 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category=Components)
 	USkeletalMeshComponent* FirstPersonMeshComponent;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category=Components)
+	UStaticMeshComponent* MagazineMesh;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category=Components)
 	UPSWeaponComponent* WeaponComponent;

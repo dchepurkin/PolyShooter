@@ -3,6 +3,7 @@
 #include "Weapon/PSWeaponBase.h"
 #include "DrawDebugHelpers.h"
 #include "PSEndFireAnimNotify.h"
+#include "PSMagazineBase.h"
 #include "PSUtils.h"
 
 DEFINE_LOG_CATEGORY_STATIC(LogPSWeaponBase, All, All)
@@ -15,8 +16,13 @@ APSWeaponBase::APSWeaponBase()
 	WeaponMesh->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	WeaponMesh->SetCastShadow(false);
 	WeaponMesh->bOnlyOwnerSee = true;
-
 	SetRootComponent(WeaponMesh);
+
+	MagazineMesh = CreateDefaultSubobject<UStaticMeshComponent>("MagazineMesh");
+	MagazineMesh->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	MagazineMesh->SetCastShadow(false);
+	MagazineMesh->bOnlyOwnerSee = true;
+	MagazineMesh->SetupAttachment(WeaponMesh);
 }
 
 void APSWeaponBase::BeginPlay()
@@ -24,6 +30,7 @@ void APSWeaponBase::BeginPlay()
 	Super::BeginPlay();
 
 	check(WeaponMesh);
+	check(MagazineMesh);
 
 	SetVisibility(false);
 	AmmoData = DefaultAmmoData;
@@ -50,16 +57,22 @@ bool APSWeaponBase::IsAmmoEmpty()
 	return IsClipEmpty() && !AmmoData.Clips;
 }
 
-void APSWeaponBase::SetVisibility(bool Visible) const
+void APSWeaponBase::SetVisibility(bool Visible)
 {
 	if(!WeaponMesh) return;
 
 	WeaponMesh->SetVisibility(Visible, true);
 }
 
-void APSWeaponBase::StartFire() {}
+void APSWeaponBase::StartFire()
+{
+	FireInProgress = true;
+}
 
-void APSWeaponBase::StopFire() {}
+void APSWeaponBase::StopFire()
+{
+	FireInProgress = false;
+}
 
 bool APSWeaponBase::GetTraceData(FVector& StartTrace, FVector& EndTrace)
 {
@@ -131,10 +144,58 @@ void APSWeaponBase::ChangeClip()
 
 bool APSWeaponBase::CanReload()
 {
-	return AmmoData.Bullets < DefaultAmmoData.Bullets && AmmoData.Clips;
+	return AmmoData.Bullets < DefaultAmmoData.Bullets && AmmoData.Clips && !IsFire();
 }
 
 bool APSWeaponBase::CanFire()
 {
 	return !IsClipEmpty() && !IsFire();
+}
+
+void APSWeaponBase::SetMagazineVisible(bool Visibility)
+{
+	MagazineMesh->SetVisibility(Visibility);
+}
+
+UStaticMesh* APSWeaponBase::GetMagazineMesh()
+{
+	return MagazineMesh->GetStaticMesh().Get();
+}
+
+void APSWeaponBase::StartSetupMagazine()
+{
+	SpawnMagazine(WeaponData.MagazineInSocketName);
+}
+
+void APSWeaponBase::EndSetupMagazine()
+{
+	Magazine->Destroy();
+	Magazine = nullptr;
+
+	SetMagazineVisible(true);
+}
+
+void APSWeaponBase::OutMagazine()
+{
+	SetMagazineVisible(false);
+}
+
+void APSWeaponBase::SpawnMagazine(const FName& SocketName)
+{
+	const auto Character = GetOwner<APSCharacterBase>();
+	if(!GetWorld() || !Character || !Character->GetMainMesh()) return;
+
+	if(!Magazine) Magazine = GetWorld()->SpawnActor<APSMagazineBase>(APSMagazineBase::StaticClass());
+	if(!Magazine) return;
+
+	Magazine->SetOwner(Character);
+	Magazine->SetMesh(GetMagazineMesh());
+
+	const FAttachmentTransformRules AttachmentRules(EAttachmentRule::SnapToTarget, false);
+	Magazine->AttachToComponent(Character->GetMainMesh(), AttachmentRules, SocketName);
+}
+
+void APSWeaponBase::AddClips(int32 ClipsAmount)
+{
+	AmmoData.Clips += ClipsAmount;
 }

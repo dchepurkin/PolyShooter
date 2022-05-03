@@ -18,6 +18,7 @@ public:
 	UPSWeaponComponent();
 
 	void AddWeapon(APSWeaponBase* NewWeapon);
+	void AddClips(TSubclassOf<APSWeaponBase> WeaponClass, int32 ClipsAmount);
 	void EquipWeapon(int32 WeaponIndex);
 
 	UFUNCTION(BlueprintCallable)
@@ -48,7 +49,10 @@ private:
 
 	void OnEquipFinished(USkeletalMeshComponent* MeshComponent);
 	void OnReloadFinished(USkeletalMeshComponent* MeshComponent);
-	void OnClipEmpty(APSWeaponBase* EmptyWeapon);	
+	void OnStartSetupMagazine(USkeletalMeshComponent* MeshComponent);
+	void OnEndSetupMagazine(USkeletalMeshComponent* MeshComponent);
+	void OnOutMagazine(USkeletalMeshComponent* MeshComponent);
+	void OnClipEmpty(APSWeaponBase* EmptyWeapon);
 
 	bool SetCurrentWeapon(int32 WeaponIndex);
 	bool CanEquip();

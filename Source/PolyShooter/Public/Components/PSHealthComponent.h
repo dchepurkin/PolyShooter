@@ -22,6 +22,7 @@ public:
 	float GetHealthPercent() const { return Health / MaxHealth; }
 
 	bool IsDead() const { return FMath::IsNearlyZero(Health); }
+	void MakeHeal(const float HealthAmount);
 
 protected:
 	virtual void BeginPlay() override;

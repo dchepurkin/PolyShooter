@@ -2,9 +2,13 @@
 
 #include "Components/PSWeaponComponent.h"
 
-#include "PSCharacterBase.h"
 #include "PSEndEquipAnimNotify.h"
 #include "PSEndReloadAnimNotify.h"
+#include "PSEndSetupMagazineAnimNotify.h"
+#include "PSCharacterBase.h"
+#include "PSMagazineBase.h"
+#include "PSMagazineOutAnimNotify.h"
+#include "PSStartSetupMagazineAnimNotify.h"
 #include "PSWeaponBase.h"
 #include "PSUtils.h"
 
@@ -42,6 +46,20 @@ void UPSWeaponComponent::AddWeapon(APSWeaponBase* NewWeapon)
 	Weapons.AddUnique(NewWeapon);
 }
 
+void UPSWeaponComponent::AddClips(TSubclassOf<APSWeaponBase> WeaponClass, int32 ClipsAmount)
+{
+	for(const auto Weapon : Weapons)
+	{
+		if(Weapon->IsA(WeaponClass))
+		{			
+			Weapon->AddClips(ClipsAmount);
+			if(Weapon->IsClipEmpty()) OnClipEmpty(Weapon);
+			return;
+		}
+	}
+	SpawnNewWeapon(WeaponClass);
+}
+
 void UPSWeaponComponent::SpawnWeapons()
 {
 	for(const auto WeaponClass : WeaponsClasses)
@@ -72,8 +90,23 @@ void UPSWeaponComponent::SpawnNewWeapon(TSubclassOf<APSWeaponBase> WeaponClass)
 	const auto ReloadFinishedNotify = PSUtils::FindFirstNotify<UPSEndReloadAnimNotify>(
 		Weapon->GetWeaponAnimData().ReloadAnimMontage);
 	if(ReloadFinishedNotify)
-		ReloadFinishedNotify->OnReloadFinished.AddUObject(
-			this, &UPSWeaponComponent::OnReloadFinished);
+		ReloadFinishedNotify->OnReloadFinished.AddUObject(this, &UPSWeaponComponent::OnReloadFinished);
+
+	const auto StartSetupMagazineNotify = PSUtils::FindFirstNotify<UPSStartSetupMagazineAnimNotify>(
+		Weapon->GetWeaponAnimData().ReloadAnimMontage);
+	if(StartSetupMagazineNotify)
+		StartSetupMagazineNotify->OnStartSetupMagazine.AddUObject(this, &UPSWeaponComponent::OnStartSetupMagazine);
+
+	const auto EndSetupMagazineNotify = PSUtils::FindFirstNotify<UPSEndSetupMagazineAnimNotify>(
+		Weapon->GetWeaponAnimData().ReloadAnimMontage);
+	if(EndSetupMagazineNotify)
+		EndSetupMagazineNotify->OnEndSetupMagazine.AddUObject(
+			this, &UPSWeaponComponent::OnEndSetupMagazine);
+
+	const auto OutMagazineNotify = PSUtils::FindFirstNotify<UPSMagazineOutAnimNotify>(
+		Weapon->GetWeaponAnimData().ReloadAnimMontage);
+	if(OutMagazineNotify)
+		OutMagazineNotify->OnMagazineOut.AddUObject(this, &UPSWeaponComponent::OnOutMagazine);
 
 	AddWeapon(Weapon);
 }
@@ -118,17 +151,13 @@ bool UPSWeaponComponent::CanEquip()
 void UPSWeaponComponent::OnEquipFinished(USkeletalMeshComponent* MeshComponent)
 {
 	if(GetOwner<APSCharacterBase>() && GetOwner<APSCharacterBase>()->GetMainMesh() == MeshComponent)
-	{
 		IsEquiping = false;
-	}
 }
 
 void UPSWeaponComponent::OnReloadFinished(USkeletalMeshComponent* MeshComponent)
 {
 	if(GetOwner<APSCharacterBase>() && GetOwner<APSCharacterBase>()->GetMainMesh() == MeshComponent)
-	{
 		IsReloading = false;
-	}
 }
 
 void UPSWeaponComponent::StartFire()
@@ -183,4 +212,28 @@ void UPSWeaponComponent::GetAnimData(FWeaponAnimData& AnimData) const
 {
 	if(!CurrentWeapon) return;
 	AnimData = CurrentWeapon->GetWeaponAnimData();
+}
+
+void UPSWeaponComponent::OnStartSetupMagazine(USkeletalMeshComponent* MeshComponent)
+{
+	const auto Character = GetOwner<APSCharacterBase>();
+	if(!CurrentWeapon || !Character || Character->GetMainMesh() != MeshComponent) return;
+
+	CurrentWeapon->StartSetupMagazine();
+}
+
+void UPSWeaponComponent::OnEndSetupMagazine(USkeletalMeshComponent* MeshComponent)
+{
+	const auto Character = GetOwner<APSCharacterBase>();
+	if(!CurrentWeapon || !Character || Character->GetMainMesh() != MeshComponent) return;
+
+	CurrentWeapon->EndSetupMagazine();
+}
+
+void UPSWeaponComponent::OnOutMagazine(USkeletalMeshComponent* MeshComponent)
+{
+	const auto Character = GetOwner<APSCharacterBase>();
+	if(!CurrentWeapon || !Character || Character->GetMainMesh() != MeshComponent) return;
+
+	CurrentWeapon->OutMagazine();
 }
