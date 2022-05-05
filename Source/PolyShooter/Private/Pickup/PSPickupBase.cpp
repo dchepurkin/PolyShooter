@@ -20,6 +20,8 @@ APSPickupBase::APSPickupBase()
 	SetRootComponent(PickupCollision);
 
 	StaticMeshComponent = CreateDefaultSubobject<UStaticMeshComponent>("StaticMeshComponent");
+	StaticMeshComponent->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	StaticMeshComponent->SetGenerateOverlapEvents(false);
 	StaticMeshComponent->SetupAttachment(PickupCollision);
 }
 
@@ -29,7 +31,7 @@ void APSPickupBase::BeginPlay()
 
 	PickupCollision->OnComponentBeginOverlap.AddDynamic(this, &APSPickupBase::OnBeginOverlap);
 
-	const auto RotationSpeed = FMath::RandRange(MinRotationSpeed, MaxRotationSpeed) * FMath::RandBool() ? 1.0 : -1.0;;
+	const auto RotationSpeed = FMath::RandRange(MinRotationSpeed, MaxRotationSpeed) * FMath::RandBool() ? 1.0 : -1.0;
 	DeltaRotation = FRotator(0.0f, RotationSpeed, 0.0f);
 }
 

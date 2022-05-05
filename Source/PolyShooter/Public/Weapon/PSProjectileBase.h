@@ -8,6 +8,8 @@
 
 class UProjectileMovementComponent;
 class USphereComponent;
+class USoundCue;
+class UPSWeaponFXComponent;
 
 UCLASS()
 class POLYSHOOTER_API APSProjectileBase : public AActor
@@ -24,6 +26,9 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category=Components)
 	UStaticMeshComponent* StaticMeshComponent;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category=Components)
+	UPSWeaponFXComponent* WeaponFXComponent;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category=Components)
 	UProjectileMovementComponent* ProjectileMovement;
@@ -45,6 +50,9 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category=PSProjectile, meta=(ClampMin = "1.0"))
 	float LifeTime = 5.0f;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category=PSProjectile)
+	USoundCue* FireSoundCue;
 
 private:
 	FVector ShotDirection = FVector::ZeroVector;

@@ -7,6 +7,7 @@
 class UBlendSpace1D;
 class UAnimSequence;
 class UAnimMontage;
+class USoundCue;
 
 USTRUCT(BlueprintType)
 struct FAmmoData
@@ -60,5 +61,29 @@ struct FWeaponData
 	FName MagazineInSocketName = "MagazineSocket";
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category=Weapon)
-	FName MagazineOutSocketName = "MagazineSocket";	
+	FName MagazineOutSocketName = "MagazineSocket";
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite,Category=Weapon)
+	TSubclassOf<UCameraShakeBase> FireCameraShake;
+};
+
+USTRUCT(BlueprintType)
+struct FWeaponFXData
+{
+	GENERATED_BODY()
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite,Category=Weapon)
+	USoundCue* ImpactSoundCue = nullptr;	
+};
+
+USTRUCT(BlueprintType)
+struct FWeaponSoundData
+{
+	GENERATED_BODY()
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite,Category=Weapon)
+	USoundCue* AimInSoundCue = nullptr;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite,Category=Weapon)
+	USoundCue* FireSoundCue = nullptr;
 };

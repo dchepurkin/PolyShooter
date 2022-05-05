@@ -5,6 +5,8 @@
 #include "PSEndFireAnimNotify.h"
 #include "PSMagazineBase.h"
 #include "PSUtils.h"
+#include "Kismet/GameplayStatics.h"
+#include "Sound/SoundCue.h"
 
 DEFINE_LOG_CATEGORY_STATIC(LogPSWeaponBase, All, All)
 
@@ -128,6 +130,8 @@ void APSWeaponBase::MakeShot()
 {
 	DecreaseAmmo();
 	PSUtils::PlayMontage(GetOwner(), WeaponAnimData.FireAnimMontage);
+	PSUtils::PlayCameraShake(GetOwner<APawn>(), WeaponData.FireCameraShake);
+	UGameplayStatics::SpawnSoundAttached(WeaponSoundData.FireSoundCue, WeaponMesh);
 }
 
 void APSWeaponBase::DecreaseAmmo()
@@ -139,7 +143,7 @@ void APSWeaponBase::DecreaseAmmo()
 void APSWeaponBase::ChangeClip()
 {
 	AmmoData.Bullets = DefaultAmmoData.Bullets;
-	--AmmoData.Clips;
+	if(!AmmoData.IsInfinite) --AmmoData.Clips;
 }
 
 bool APSWeaponBase::CanReload()
@@ -197,5 +201,5 @@ void APSWeaponBase::SpawnMagazine(const FName& SocketName)
 
 void APSWeaponBase::AddClips(int32 ClipsAmount)
 {
-	AmmoData.Clips += ClipsAmount;
+	if(!AmmoData.IsInfinite) AmmoData.Clips += ClipsAmount;
 }

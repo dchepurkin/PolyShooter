@@ -5,6 +5,8 @@
 #include "GameFramework/ProjectileMovementComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "DrawDebugHelpers.h"
+#include "PSWeaponFXComponent.h"
+#include "Sound/SoundCue.h"
 
 DEFINE_LOG_CATEGORY_STATIC(LogPSProjectile, All, All);
 
@@ -24,6 +26,8 @@ APSProjectileBase::APSProjectileBase()
 	StaticMeshComponent->SetCollisionResponseToAllChannels(ECR_Ignore);
 	StaticMeshComponent->SetupAttachment(ProjectileCollision);
 
+	WeaponFXComponent = CreateDefaultSubobject<UPSWeaponFXComponent>("WeaponFXComponent");
+
 	ProjectileMovement = CreateDefaultSubobject<UProjectileMovementComponent>("ProjectileMovement");
 	ProjectileMovement->ProjectileGravityScale = 0.0f;
 	ProjectileMovement->InitialSpeed = 2000.0f;
@@ -41,6 +45,7 @@ void APSProjectileBase::BeginPlay()
 	ProjectileMovement->Velocity = ShotDirection * ProjectileMovement->InitialSpeed;
 	ProjectileCollision->OnComponentHit.AddDynamic(this, &APSProjectileBase::OnHit);
 
+	UGameplayStatics::SpawnSoundAttached(FireSoundCue, StaticMeshComponent);
 	SetLifeSpan(LifeTime);
 }
 
@@ -49,6 +54,7 @@ void APSProjectileBase::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherAc
                               FVector NormalImpulse, const FHitResult& Hit)
 {
 	ProjectileMovement->StopMovementImmediately();
+	WeaponFXComponent->PlayImpactFX(Hit);
 	MakeDamage();
 	Destroy();
 }

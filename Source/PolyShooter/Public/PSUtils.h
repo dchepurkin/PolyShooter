@@ -29,4 +29,14 @@ public:
 		}
 		return nullptr;
 	}
+
+	static void PlayCameraShake(const APawn* Character, const TSubclassOf<UCameraShakeBase> CameraShake)
+	{
+		if(!Character) return;
+		
+		const auto Controller = Character->GetController<APlayerController>();
+		if(!Controller || !Controller->PlayerCameraManager) return;
+		
+		Controller->PlayerCameraManager->StartCameraShake(CameraShake);
+	}
 };

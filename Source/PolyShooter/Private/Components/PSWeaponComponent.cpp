@@ -11,6 +11,8 @@
 #include "PSStartSetupMagazineAnimNotify.h"
 #include "PSWeaponBase.h"
 #include "PSUtils.h"
+#include "Kismet/GameplayStatics.h"
+#include "Sound/SoundCue.h"
 
 DEFINE_LOG_CATEGORY_STATIC(LogPSWeaponComponent, All, All)
 
@@ -51,7 +53,7 @@ void UPSWeaponComponent::AddClips(TSubclassOf<APSWeaponBase> WeaponClass, int32 
 	for(const auto Weapon : Weapons)
 	{
 		if(Weapon->IsA(WeaponClass))
-		{			
+		{
 			Weapon->AddClips(ClipsAmount);
 			if(Weapon->IsClipEmpty()) OnClipEmpty(Weapon);
 			return;
@@ -83,30 +85,20 @@ void UPSWeaponComponent::SpawnNewWeapon(TSubclassOf<APSWeaponBase> WeaponClass)
 
 	Weapon->OnClipEmpty.AddUObject(this, &UPSWeaponComponent::OnClipEmpty);
 
-	const auto EquipFinishedNotify = PSUtils::FindFirstNotify<UPSEndEquipAnimNotify>(
-		Weapon->GetWeaponAnimData().EquipAnimMontage);
+	const auto EquipFinishedNotify = PSUtils::FindFirstNotify<UPSEndEquipAnimNotify>(Weapon->GetWeaponAnimData().EquipAnimMontage);
 	if(EquipFinishedNotify) EquipFinishedNotify->OnEquipFinished.AddUObject(this, &UPSWeaponComponent::OnEquipFinished);
 
-	const auto ReloadFinishedNotify = PSUtils::FindFirstNotify<UPSEndReloadAnimNotify>(
-		Weapon->GetWeaponAnimData().ReloadAnimMontage);
-	if(ReloadFinishedNotify)
-		ReloadFinishedNotify->OnReloadFinished.AddUObject(this, &UPSWeaponComponent::OnReloadFinished);
+	const auto ReloadFinishedNotify = PSUtils::FindFirstNotify<UPSEndReloadAnimNotify>(Weapon->GetWeaponAnimData().ReloadAnimMontage);
+	if(ReloadFinishedNotify) ReloadFinishedNotify->OnReloadFinished.AddUObject(this, &UPSWeaponComponent::OnReloadFinished);
 
-	const auto StartSetupMagazineNotify = PSUtils::FindFirstNotify<UPSStartSetupMagazineAnimNotify>(
-		Weapon->GetWeaponAnimData().ReloadAnimMontage);
-	if(StartSetupMagazineNotify)
-		StartSetupMagazineNotify->OnStartSetupMagazine.AddUObject(this, &UPSWeaponComponent::OnStartSetupMagazine);
+	const auto StartSetupMagazineNotify = PSUtils::FindFirstNotify<UPSStartSetupMagazineAnimNotify>(Weapon->GetWeaponAnimData().ReloadAnimMontage);
+	if(StartSetupMagazineNotify) StartSetupMagazineNotify->OnStartSetupMagazine.AddUObject(this, &UPSWeaponComponent::OnStartSetupMagazine);
 
-	const auto EndSetupMagazineNotify = PSUtils::FindFirstNotify<UPSEndSetupMagazineAnimNotify>(
-		Weapon->GetWeaponAnimData().ReloadAnimMontage);
-	if(EndSetupMagazineNotify)
-		EndSetupMagazineNotify->OnEndSetupMagazine.AddUObject(
-			this, &UPSWeaponComponent::OnEndSetupMagazine);
+	const auto EndSetupMagazineNotify = PSUtils::FindFirstNotify<UPSEndSetupMagazineAnimNotify>(Weapon->GetWeaponAnimData().ReloadAnimMontage);
+	if(EndSetupMagazineNotify) EndSetupMagazineNotify->OnEndSetupMagazine.AddUObject(this, &UPSWeaponComponent::OnEndSetupMagazine);
 
-	const auto OutMagazineNotify = PSUtils::FindFirstNotify<UPSMagazineOutAnimNotify>(
-		Weapon->GetWeaponAnimData().ReloadAnimMontage);
-	if(OutMagazineNotify)
-		OutMagazineNotify->OnMagazineOut.AddUObject(this, &UPSWeaponComponent::OnOutMagazine);
+	const auto OutMagazineNotify = PSUtils::FindFirstNotify<UPSMagazineOutAnimNotify>(Weapon->GetWeaponAnimData().ReloadAnimMontage);
+	if(OutMagazineNotify) OutMagazineNotify->OnMagazineOut.AddUObject(this, &UPSWeaponComponent::OnOutMagazine);
 
 	AddWeapon(Weapon);
 }
@@ -138,6 +130,7 @@ void UPSWeaponComponent::EquipWeapon(int32 WeaponIndex)
 
 	IsEquiping = true;
 	PSUtils::PlayMontage(GetOwner(), CurrentWeapon->GetWeaponAnimData().EquipAnimMontage);
+	UGameplayStatics::SpawnSoundAttached(CurrentWeapon->GetSoundData().AimInSoundCue, CurrentWeapon->GetWeaponMesh());
 }
 
 bool UPSWeaponComponent::CanEquip()
