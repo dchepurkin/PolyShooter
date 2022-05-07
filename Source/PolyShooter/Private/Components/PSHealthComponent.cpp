@@ -45,6 +45,7 @@ void UPSHealthComponent::ApplyDamage(float Damage)
 void UPSHealthComponent::SetHealth(float NewHealth)
 {
 	Health = FMath::Clamp(NewHealth, 0.0f, MaxHealth);
+	OnHealthChanged.Broadcast(GetHealthPercent());
 }
 
 void UPSHealthComponent::OnLanded(const FHitResult& Hit)

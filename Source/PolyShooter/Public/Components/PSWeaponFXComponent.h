@@ -21,5 +21,11 @@ protected:
 	virtual void BeginPlay() override;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category=PSWeaponFX)
-	FWeaponFXData WeaponFXData;
+	FImpactData DefaultImpactData;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category=PSWeaponFX)
+	TMap<UPhysicalMaterial*, FImpactData> ImpactData;
+
+private:
+	void SpawnDecal(const FHitResult& HitResult, FImpactData& CurrentImpactData);
 };

@@ -120,10 +120,6 @@ void APSWeaponBase::FireLineTrace(FHitResult& HitResult, const FVector& StartTra
 	CollisionQueryParams.bReturnPhysicalMaterial = true;
 
 	GetWorld()->LineTraceSingleByChannel(HitResult, StartTrace, EndTrace, ECC_Visibility, CollisionQueryParams);
-	if(HitResult.bBlockingHit)
-	{
-		DrawDebugSphere(GetWorld(), HitResult.ImpactPoint, 2.0f, 8, FColor::Green, false, 5.0f, 0, 1.0f);
-	}
 }
 
 void APSWeaponBase::MakeShot()

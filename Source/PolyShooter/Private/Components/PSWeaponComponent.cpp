@@ -121,6 +121,7 @@ bool UPSWeaponComponent::SetCurrentWeapon(int32 WeaponIndex)
 
 	CurrentWeapon->SetVisibility(true);
 
+	OnChangeWeapon.Broadcast(CurrentWeapon);
 	return true;
 }
 
@@ -130,7 +131,7 @@ void UPSWeaponComponent::EquipWeapon(int32 WeaponIndex)
 
 	IsEquiping = true;
 	PSUtils::PlayMontage(GetOwner(), CurrentWeapon->GetWeaponAnimData().EquipAnimMontage);
-	UGameplayStatics::SpawnSoundAttached(CurrentWeapon->GetSoundData().AimInSoundCue, CurrentWeapon->GetWeaponMesh());
+	UGameplayStatics::SpawnSoundAttached(CurrentWeapon->GetSoundData().AimInSoundCue, CurrentWeapon->GetWeaponMesh());	
 }
 
 bool UPSWeaponComponent::CanEquip()

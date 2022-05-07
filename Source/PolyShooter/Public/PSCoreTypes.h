@@ -63,17 +63,35 @@ struct FWeaponData
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category=Weapon)
 	FName MagazineOutSocketName = "MagazineSocket";
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite,Category=Weapon)
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category=Weapon)
 	TSubclassOf<UCameraShakeBase> FireCameraShake;
 };
 
 USTRUCT(BlueprintType)
-struct FWeaponFXData
+struct FImpactData
 {
 	GENERATED_BODY()
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite,Category=Weapon)
-	USoundCue* ImpactSoundCue = nullptr;	
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category=Weapon)
+	USoundCue* ImpactSoundCue = nullptr;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category=Weapon)
+	UMaterial* ImpactMaterial = nullptr;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category=Weapon)
+	FName BaseColorName = "BaseColor";
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category=Weapon)
+	TArray<UTexture2D*> ImpactTextures;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category=Weapon)
+	FVector ImpactSize{0.1f, 3.0f, 3.0f};
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category=Weapon, meta=(ClampMin = "0.1"))
+	float ImpactLifeTime = 5.0f;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category=Weapon, meta=(ClampMin = "0.1"))
+	float ImpactFadeOutTime = 1.0f;
 };
 
 USTRUCT(BlueprintType)
@@ -81,9 +99,21 @@ struct FWeaponSoundData
 {
 	GENERATED_BODY()
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite,Category=Weapon)
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category=Weapon)
 	USoundCue* AimInSoundCue = nullptr;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite,Category=Weapon)
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category=Weapon)
 	USoundCue* FireSoundCue = nullptr;
+};
+
+USTRUCT(BlueprintType)
+struct FWeaponUIData
+{
+	GENERATED_BODY()
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category=Weapon)
+	UTexture2D* WeaponImage = nullptr;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category=Weapon)
+	UTexture2D* CrossHairImage = nullptr;
 };

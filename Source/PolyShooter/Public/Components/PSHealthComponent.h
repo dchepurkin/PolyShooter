@@ -6,7 +6,8 @@
 #include "Components/ActorComponent.h"
 #include "PSHealthComponent.generated.h"
 
-DECLARE_MULTICAST_DELEGATE(FOnDeathSignature)
+DECLARE_MULTICAST_DELEGATE(FOnDeathSignature);
+DECLARE_MULTICAST_DELEGATE_OneParam(FOnHealthChangedSignature, float);
 
 UCLASS(ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))
 class POLYSHOOTER_API UPSHealthComponent : public UActorComponent
@@ -17,6 +18,7 @@ public:
 	UPSHealthComponent();
 
 	FOnDeathSignature OnDeath;
+	FOnHealthChangedSignature OnHealthChanged;
 
 	UFUNCTION(BlueprintCallable)
 	float GetHealthPercent() const { return Health / MaxHealth; }

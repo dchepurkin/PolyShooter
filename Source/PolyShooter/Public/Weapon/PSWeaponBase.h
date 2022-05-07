@@ -27,6 +27,7 @@ public:
 	const FWeaponData& GetWeaponData() const { return WeaponData; }
 	const FAmmoData& GetAmmoData() const { return AmmoData; }
 	const FWeaponSoundData& GetSoundData() const { return WeaponSoundData; }
+	const FWeaponUIData& GetWeaponUIData() const { return WeaponUIData; }
 	UStaticMeshComponent* GetWeaponMesh() { return WeaponMesh; }
 
 	virtual void StartFire();
@@ -75,6 +76,9 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category=PSWeaponBase)
 	FWeaponSoundData WeaponSoundData;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category=PSWeaponBase)
+	FWeaponUIData WeaponUIData;
 
 	UPROPERTY()
 	APSMagazineBase* Magazine;

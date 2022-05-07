@@ -9,6 +9,8 @@
 
 class APSWeaponBase;
 
+DECLARE_MULTICAST_DELEGATE_OneParam(FOnSetCurrentWeaponSignature, APSWeaponBase* CurrentWeapon);
+
 UCLASS(ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))
 class POLYSHOOTER_API UPSWeaponComponent : public UActorComponent
 {
@@ -16,6 +18,8 @@ class POLYSHOOTER_API UPSWeaponComponent : public UActorComponent
 
 public:
 	UPSWeaponComponent();
+
+	FOnSetCurrentWeaponSignature OnChangeWeapon;
 
 	void AddWeapon(APSWeaponBase* NewWeapon);
 	void AddClips(TSubclassOf<APSWeaponBase> WeaponClass, int32 ClipsAmount);
