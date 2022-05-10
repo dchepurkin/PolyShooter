@@ -4,6 +4,8 @@
 
 #include "PSHealthComponent.h"
 #include "Components/SphereComponent.h"
+#include "Kismet/GameplayStatics.h"
+#include "Sound/SoundCue.h"
 
 DEFINE_LOG_CATEGORY_STATIC(LogPSPickup, All, All);
 
@@ -53,4 +55,10 @@ bool APSPickupBase::CanTake(AActor* OtherActor)
 {
 	const auto HealthComponent = OtherActor->FindComponentByClass<UPSHealthComponent>();
 	return HealthComponent && !HealthComponent->IsDead();
+}
+
+void APSPickupBase::TakePickup(AActor* OtherActor)
+{
+	UGameplayStatics::PlaySoundAtLocation(this, TakeSound, GetActorLocation());
+	Destroy();
 }

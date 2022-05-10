@@ -85,7 +85,7 @@ struct FImpactData
 	TArray<UTexture2D*> ImpactTextures;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category=Weapon)
-	FVector ImpactSize{0.1f, 3.0f, 3.0f};
+	FVector ImpactSize{10.0f, 3.0f, 3.0f};
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category=Weapon, meta=(ClampMin = "0.1"))
 	float ImpactLifeTime = 5.0f;
