@@ -13,13 +13,14 @@ APSDoorBase::APSDoorBase()
 	PrimaryActorTick.bCanEverTick = false;
 
 	DoorArchStaticMesh = CreateDefaultSubobject<UStaticMeshComponent>("DoorArch");
+	DoorArchStaticMesh->SetCollisionObjectType(ECC_WorldStatic);
 	SetRootComponent(DoorArchStaticMesh);
 
 	TriggerCollision = CreateDefaultSubobject<UBoxComponent>("TriggerCollision");
 	TriggerCollision->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
 	TriggerCollision->SetCollisionObjectType(ECC_WorldStatic);
 	TriggerCollision->SetCollisionResponseToAllChannels(ECR_Ignore);
-	TriggerCollision->SetCollisionResponseToChannel(ECC_Pawn, ECR_Overlap);
+	TriggerCollision->SetCollisionResponseToChannel(ECC_GameTraceChannel1, ECR_Overlap);
 	TriggerCollision->SetupAttachment(GetRootComponent());
 
 	OpenDoorTimeline = CreateDefaultSubobject<UTimelineComponent>("OpenDoorTimeline");
@@ -56,11 +57,11 @@ void APSDoorBase::OnEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor*
 void APSDoorBase::Open() const
 {
 	OpenDoorTimeline->Play();
-	UGameplayStatics::PlaySoundAtLocation(this, OpenDoorSound, GetActorLocation());
+	if(!IsOpen) UGameplayStatics::PlaySoundAtLocation(this, OpenDoorSound, GetActorLocation());
 }
 
 void APSDoorBase::Close() const
 {
 	OpenDoorTimeline->Reverse();
-	UGameplayStatics::PlaySoundAtLocation(this, CloseDoorSound, GetActorLocation());
+	if(IsOpen) UGameplayStatics::PlaySoundAtLocation(this, CloseDoorSound, GetActorLocation());
 }

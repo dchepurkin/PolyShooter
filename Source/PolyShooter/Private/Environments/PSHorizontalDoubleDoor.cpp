@@ -5,9 +5,11 @@
 APSHorizontalDoubleDoor::APSHorizontalDoubleDoor()
 {
 	LeftDoorStaticMesh = CreateDefaultSubobject<UStaticMeshComponent>("LeftDoorMesh");
+	LeftDoorStaticMesh->SetCollisionObjectType(ECC_WorldStatic);
 	LeftDoorStaticMesh->SetupAttachment(GetRootComponent());
 
 	RightDoorStaticMesh = CreateDefaultSubobject<UStaticMeshComponent>("RightDoorMesh");
+	RightDoorStaticMesh->SetCollisionObjectType(ECC_WorldStatic);
 	RightDoorStaticMesh->SetupAttachment(GetRootComponent());
 }
 

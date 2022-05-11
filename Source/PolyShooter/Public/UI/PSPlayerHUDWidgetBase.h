@@ -9,6 +9,7 @@
 
 class APSWeaponBase;
 class UProgressBar;
+class UTextBlock;
 class UImage;
 
 UCLASS()
@@ -19,6 +20,9 @@ class POLYSHOOTER_API UPSPlayerHUDWidgetBase : public UUserWidget
 public:
 	UFUNCTION(BlueprintCallable)
 	void GetAmmoData(FAmmoData& AmmoData) const;
+
+	UFUNCTION(BlueprintCallable)
+	void GetPlayerLifes(int32& Lifes) const;
 
 protected:
 	virtual void NativeOnInitialized() override;
@@ -40,6 +44,9 @@ protected:
 
 	UPROPERTY(meta=(BindWidget))
 	UImage* WeaponImage;
+
+	UPROPERTY(meta=(BindWidget))
+	UTextBlock* PlayerLifesTextBlock;
 
 private:
 	void SetHealthPercent(const float HealthPercent) const;

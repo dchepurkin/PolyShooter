@@ -8,6 +8,7 @@
 #include "PSWeaponComponent.generated.h"
 
 class APSWeaponBase;
+class APSAmmoBoxPickup;
 
 DECLARE_MULTICAST_DELEGATE_OneParam(FOnSetCurrentWeaponSignature, APSWeaponBase* CurrentWeapon);
 
@@ -33,12 +34,17 @@ public:
 	void StopFire();
 	void ChangeClip();
 
+	void SpawnAmmoBox();
+
 protected:
 	virtual void BeginPlay() override;
 	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category=PSWeaponComponent)
 	TArray<TSubclassOf<APSWeaponBase>> WeaponsClasses;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category=PSWeaponComponent)
+	TSubclassOf<APSAmmoBoxPickup> AmmoBoxPickupClass;
 
 private:
 	TArray<APSWeaponBase*> Weapons;

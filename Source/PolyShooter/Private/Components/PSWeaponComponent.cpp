@@ -2,6 +2,7 @@
 
 #include "Components/PSWeaponComponent.h"
 
+#include "PSAmmoBoxPickup.h"
 #include "PSEndEquipAnimNotify.h"
 #include "PSEndReloadAnimNotify.h"
 #include "PSEndSetupMagazineAnimNotify.h"
@@ -131,7 +132,7 @@ void UPSWeaponComponent::EquipWeapon(int32 WeaponIndex)
 
 	IsEquiping = true;
 	PSUtils::PlayMontage(GetOwner(), CurrentWeapon->GetWeaponAnimData().EquipAnimMontage);
-	UGameplayStatics::SpawnSoundAttached(CurrentWeapon->GetSoundData().AimInSoundCue, CurrentWeapon->GetWeaponMesh());	
+	UGameplayStatics::SpawnSoundAttached(CurrentWeapon->GetSoundData().AimInSoundCue, CurrentWeapon->GetWeaponMesh());
 }
 
 bool UPSWeaponComponent::CanEquip()
@@ -189,6 +190,22 @@ void UPSWeaponComponent::ChangeClip()
 	IsReloading = true;
 	PSUtils::PlayMontage(GetOwner(), CurrentWeapon->GetWeaponAnimData().ReloadAnimMontage);
 	CurrentWeapon->ChangeClip();
+}
+
+void UPSWeaponComponent::SpawnAmmoBox()
+{
+	if(!AmmoBoxPickupClass || !GetWorld() || !GetOwner()) return;
+
+	const FTransform SpawnTransform(GetOwner()->GetActorLocation());
+	const auto AmmoBox = GetWorld()->SpawnActorDeferred<APSAmmoBoxPickup>(AmmoBoxPickupClass, SpawnTransform);
+	if(!AmmoBox) return;
+	
+	for(const auto Weapon : Weapons)
+	{
+		if(Weapon && !Weapon->GetAmmoData().IsInfinite && !Weapon->IsAmmoEmpty()) AmmoBox->AddWeapon(Weapon->GetClass(), Weapon->GetAmmoData().Clips);
+	}
+	
+	AmmoBox->FinishSpawning(SpawnTransform);
 }
 
 bool UPSWeaponComponent::CanReload()

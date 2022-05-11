@@ -7,6 +7,7 @@ DEFINE_LOG_CATEGORY_STATIC(LogPSVerticalDoor, All, All);
 APSVerticalDoor::APSVerticalDoor()
 {
 	DoorStaticMesh = CreateDefaultSubobject<UStaticMeshComponent>("DoorMesh");
+	DoorStaticMesh->SetCollisionObjectType(ECC_WorldStatic);
 	DoorStaticMesh->SetupAttachment(GetRootComponent());
 }
 

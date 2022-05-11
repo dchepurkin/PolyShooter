@@ -8,6 +8,7 @@ class UBlendSpace1D;
 class UAnimSequence;
 class UAnimMontage;
 class USoundCue;
+class APSWeaponBase;
 
 USTRUCT(BlueprintType)
 struct FAmmoData
@@ -116,4 +117,14 @@ struct FWeaponUIData
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category=Weapon)
 	UTexture2D* CrossHairImage = nullptr;
+};
+
+//Player
+USTRUCT(BlueprintType)
+struct FPlayerData
+{
+	GENERATED_BODY()
+
+	UPROPERTY(EditDefaultsOnly,BlueprintReadWrite, meta=(ClampMin = "1"))
+	int32 Lifes = 3;
 };

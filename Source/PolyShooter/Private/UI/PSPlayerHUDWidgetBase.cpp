@@ -2,6 +2,7 @@
 
 #include "UI/PSPlayerHUDWidgetBase.h"
 
+#include "PSGameInstance.h"
 #include "PSHealthComponent.h"
 #include "PSWeaponBase.h"
 #include "PSWeaponComponent.h"
@@ -31,7 +32,7 @@ void UPSPlayerHUDWidgetBase::NativeOnInitialized()
 void UPSPlayerHUDWidgetBase::SetHealthPercent(const float HealthPercent) const
 {
 	if(!HealthProgressBar) return;
-	
+
 	HealthProgressBar->SetPercent(HealthPercent);
 	HealthProgressBar->SetFillColorAndOpacity(HealthPercent > HealthCriticalThreshold ? GoodColor : BadColor);
 }
@@ -52,4 +53,11 @@ void UPSPlayerHUDWidgetBase::GetAmmoData(FAmmoData& AmmoData) const
 	if(!WeaponComponent) return;
 
 	WeaponComponent->GetAmmoData(AmmoData);
+}
+
+void UPSPlayerHUDWidgetBase::GetPlayerLifes(int32& Lifes) const
+{
+	if(!GetOwningPlayer() || !GetOwningPlayer()->GetGameInstance<UPSGameInstance>()) return;
+
+	GetOwningPlayer()->GetGameInstance<UPSGameInstance>()->GetLifes(Lifes);	
 }

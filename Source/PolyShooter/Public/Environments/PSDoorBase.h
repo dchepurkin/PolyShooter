@@ -48,11 +48,13 @@ protected:
 	USoundCue* CloseDoorSound = nullptr;
 
 	UFUNCTION()
-	virtual void OnTimelineTick(float Alpha) {}
+	virtual void OnTimelineTick(float Alpha) { IsOpen = FMath::IsNearlyEqual(Alpha, 1.0f); }
 
 private:
 	FTimerHandle CloseDoorTimerHandle;
 	FOnTimelineFloat UpdateTimelineFloat;
+
+	bool IsOpen = false;
 
 	UFUNCTION()
 	void OnBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep,

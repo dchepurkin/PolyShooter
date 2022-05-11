@@ -13,11 +13,14 @@ APSPickupBase::APSPickupBase()
 {
 	PrimaryActorTick.bCanEverTick = true;
 
+	SpawnCollisionHandlingMethod = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
+
 	PickupCollision = CreateDefaultSubobject<USphereComponent>("PickupCollision");
 	PickupCollision->SetSphereRadius(50.0f);
 	PickupCollision->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
 	PickupCollision->SetCollisionResponseToAllChannels(ECR_Ignore);
-	PickupCollision->SetCollisionResponseToChannel(ECollisionChannel::ECC_Pawn, ECollisionResponse::ECR_Overlap);
+	PickupCollision->SetCollisionResponseToChannel(ECollisionChannel::ECC_GameTraceChannel1, ECollisionResponse::ECR_Overlap);
+	PickupCollision->SetCollisionResponseToChannel(ECollisionChannel::ECC_WorldStatic, ECollisionResponse::ECR_Block);
 	PickupCollision->SetCollisionObjectType(ECollisionChannel::ECC_WorldStatic);
 	SetRootComponent(PickupCollision);
 
