@@ -16,14 +16,14 @@ struct FAmmoData
 	GENERATED_BODY()
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category=Weapon, meta=(ClampMin = "0"))
-	int32 Bullets = 15;
+	int32 Bullets = 0;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category=Weapon, DisplayName="Infinite")
 	bool IsInfinite = false;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category=Weapon,
-		meta=(ClampMin = "0", EditCondition = "!IsInfinite"))
-	int32 Clips = 5;
+		meta=(ClampMin = "0", EditCondition="!IsInfinite"))
+	int32 Clips = 0;	
 };
 
 USTRUCT(BlueprintType)
@@ -113,9 +113,6 @@ struct FWeaponUIData
 	GENERATED_BODY()
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category=Weapon)
-	UTexture2D* WeaponImage = nullptr;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category=Weapon)
 	UTexture2D* CrossHairImage = nullptr;
 };
 
@@ -125,6 +122,9 @@ struct FPlayerData
 {
 	GENERATED_BODY()
 
-	UPROPERTY(EditDefaultsOnly,BlueprintReadWrite, meta=(ClampMin = "1"))
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, meta=(ClampMin = "1"))
 	int32 Lifes = 3;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, meta=(ClampMin = "1"))
+	int32 MaxLifes = 9;
 };

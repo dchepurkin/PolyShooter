@@ -29,6 +29,7 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void GetAmmoData(FAmmoData& AmmoData) const;
 	void GetAnimData(FWeaponAnimData& AnimData) const;
+	void GetUIData(FWeaponUIData& WeaponUIData) const;
 
 	void StartFire();
 	void StopFire();
@@ -41,7 +42,7 @@ protected:
 	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category=PSWeaponComponent)
-	TArray<TSubclassOf<APSWeaponBase>> WeaponsClasses;
+	TMap<TSubclassOf<APSWeaponBase>, int32> WeaponsStruct;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category=PSWeaponComponent)
 	TSubclassOf<APSAmmoBoxPickup> AmmoBoxPickupClass;
@@ -55,7 +56,7 @@ private:
 	APSWeaponBase* CurrentWeapon;
 
 	void SpawnWeapons();
-	void SpawnNewWeapon(TSubclassOf<APSWeaponBase> WeaponClass);
+	void SpawnNewWeapon(TSubclassOf<APSWeaponBase> WeaponClass, int32 ClipsAmount);
 
 	void OnEquipFinished(USkeletalMeshComponent* MeshComponent);
 	void OnReloadFinished(USkeletalMeshComponent* MeshComponent);

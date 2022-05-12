@@ -18,6 +18,8 @@ public:
 	APSPickupBase();
 	virtual void Tick(float DeltaTime) override;
 
+	static FVector GetSpawnLocationSnapedToFloor(const UWorld* World, const FVector& SpawnLocation);
+
 protected:
 	virtual void BeginPlay() override;
 

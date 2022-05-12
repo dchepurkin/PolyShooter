@@ -27,5 +27,8 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category=Components)
 	UPSHealthComponent* HealthComponent;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category=PSCharacter)
+	float DeathLifeSpan = 5.0f;
+
 	virtual void OnDeath();
 };

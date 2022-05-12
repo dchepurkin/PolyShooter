@@ -47,6 +47,15 @@ void APSPickupBase::Tick(float DeltaTime)
 	AddActorWorldRotation(DeltaRotation);
 }
 
+FVector APSPickupBase::GetSpawnLocationSnapedToFloor(const UWorld* World, const FVector& SpawnLocation)
+{
+	FHitResult HitResult;
+	const auto EndTrace = FVector(SpawnLocation.X, SpawnLocation.Y, SpawnLocation.Z - 200.0f);
+	if(World) World->LineTraceSingleByChannel(HitResult, SpawnLocation, EndTrace, ECC_Visibility);
+
+	return HitResult.ImpactPoint;
+}
+
 void APSPickupBase::OnBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
                                    UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep,
                                    const FHitResult& SweepResult)

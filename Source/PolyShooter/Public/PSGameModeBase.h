@@ -13,4 +13,6 @@ class POLYSHOOTER_API APSGameModeBase : public AGameModeBase
 
 public:
 	APSGameModeBase();
+
+	void RespawnPlayer(AController* Controller);
 };

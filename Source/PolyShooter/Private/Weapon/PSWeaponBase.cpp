@@ -35,7 +35,7 @@ void APSWeaponBase::BeginPlay()
 	check(MagazineMesh);
 
 	SetVisibility(false);
-	AmmoData = DefaultAmmoData;
+	SetInfinite(DefaultAmmoData.IsInfinite);
 
 	const auto FireEndNotify = PSUtils::FindFirstNotify<UPSEndFireAnimNotify>(WeaponAnimData.FireAnimMontage);
 	if(FireEndNotify) FireEndNotify->OnFireFinished.AddUObject(this, &APSWeaponBase::OnFireAnimFinished);
@@ -136,6 +136,11 @@ void APSWeaponBase::DecreaseAmmo()
 		--AmmoData.Bullets;
 }
 
+void APSWeaponBase::SetInfinite(bool Infinite)
+{
+	AmmoData.IsInfinite = Infinite;
+}
+
 void APSWeaponBase::ChangeClip()
 {
 	AmmoData.Bullets = DefaultAmmoData.Bullets;
@@ -144,7 +149,7 @@ void APSWeaponBase::ChangeClip()
 
 bool APSWeaponBase::CanReload()
 {
-	return AmmoData.Bullets < DefaultAmmoData.Bullets && AmmoData.Clips && !IsFire();
+	return !IsFire() && AmmoData.Bullets < DefaultAmmoData.Bullets && (AmmoData.Clips || AmmoData.IsInfinite);
 }
 
 bool APSWeaponBase::CanFire()

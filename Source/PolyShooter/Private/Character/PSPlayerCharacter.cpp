@@ -114,6 +114,5 @@ void APSPlayerCharacter::OnDeath()
 {
 	Super::OnDeath();
 	StopFire();
-	if(GetController()) GetController()->ChangeState(NAME_Spectating);
 	if(WeaponComponent) WeaponComponent->SpawnAmmoBox();
 }

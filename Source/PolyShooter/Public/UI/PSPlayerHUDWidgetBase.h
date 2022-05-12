@@ -22,13 +22,22 @@ public:
 	void GetAmmoData(FAmmoData& AmmoData) const;
 
 	UFUNCTION(BlueprintCallable)
-	void GetPlayerLifes(int32& Lifes) const;
+	bool IsSpectating() const;
+
+	UFUNCTION(BlueprintCallable)
+	float GetRespawnCountDown() const;
+
+	UFUNCTION(BlueprintCallable)
+	int32 GetPlayerLifes() const;
+
+	UFUNCTION(BlueprintCallable)
+	float GetPlayerHealthPercent() const;
+
+	UFUNCTION(BlueprintCallable)
+	void GetWeaponUIData(FWeaponUIData& WeaponUIData) const;
 
 protected:
 	virtual void NativeOnInitialized() override;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category=PSPlayerHUD,meta=(ClampMin = "0.1", ClampMax = "0.9"))
-	float HealthCriticalThreshold = 0.3;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category=PSPlayerHUD)
 	FLinearColor GoodColor = FLinearColor(0.05098f, 0.05098f, 0.05098f);
@@ -40,15 +49,10 @@ protected:
 	UProgressBar* HealthProgressBar;
 
 	UPROPERTY(meta=(BindWidget))
-	UImage* CrossHairImage;
-
-	UPROPERTY(meta=(BindWidget))
-	UImage* WeaponImage;
-
-	UPROPERTY(meta=(BindWidget))
 	UTextBlock* PlayerLifesTextBlock;
 
 private:
-	void SetHealthPercent(const float HealthPercent) const;
-	void OnChangeWeapon(APSWeaponBase* CurrentWeapon) const;
+	void OnPawnChanged(APawn* NewPawn);
+	void OnHealthChanged(const float HealthPercent);	
+	void UpdateHealthBar();
 };

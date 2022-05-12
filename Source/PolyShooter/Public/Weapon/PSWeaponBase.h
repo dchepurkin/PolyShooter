@@ -22,7 +22,7 @@ public:
 	APSWeaponBase();
 
 	FOnClipEmptySignature OnClipEmpty;
-
+	
 	const FWeaponAnimData& GetWeaponAnimData() const { return WeaponAnimData; }
 	const FWeaponData& GetWeaponData() const { return WeaponData; }
 	const FAmmoData& GetAmmoData() const { return AmmoData; }
@@ -66,10 +66,10 @@ protected:
 	float BulletSpread = 1.5f;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category=PSWeaponBase)
-	FWeaponData WeaponData;
+	FAmmoData DefaultAmmoData;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category=PSWeaponBase)
-	FAmmoData DefaultAmmoData;
+	FWeaponData WeaponData;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category=PSWeaponBase)
 	FWeaponAnimData WeaponAnimData;
@@ -96,10 +96,11 @@ protected:
 	void SpawnMagazine(const FName& SocketName);
 	UStaticMesh* GetMagazineMesh();
 
-private:
+private:	
 	FAmmoData AmmoData;
 
 	bool GetPlayerViewPoint(FVector& ViewLocation, FRotator& ViewRotation);
 	void GetMuzzleSocketTransform(FVector& ViewLocation, FRotator& ViewRotation);
 	void DecreaseAmmo();
+	void SetInfinite(bool Infinite);
 };

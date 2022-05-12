@@ -13,10 +13,11 @@ class POLYSHOOTER_API UPSGameInstance : public UGameInstance
 	GENERATED_BODY()
 public:
 	void OnDeath();
+	void SetPlayerLifes(const int32 NewLifeAmount);
 	void SaveAmmoData(const TMap<TSubclassOf<APSWeaponBase>, FAmmoData>& PlayerAmmoData);
 
 	UFUNCTION(BlueprintCallable)
-	void GetLifes(int32& Lifes) const { Lifes = PlayerData.Lifes; }
+	int32 GetLifes() const { return PlayerData.Lifes; }
 
 protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category=PSGameInstance)

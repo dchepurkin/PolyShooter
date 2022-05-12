@@ -38,5 +38,6 @@ void APSCharacterBase::OnDeath()
 	GetMesh()->SetSimulatePhysics(true);
 	GetCapsuleComponent()->SetCollisionResponseToAllChannels(ECR_Ignore);
 	GetCharacterMovement()->DisableMovement();
+	SetLifeSpan(DeathLifeSpan);
 }
 

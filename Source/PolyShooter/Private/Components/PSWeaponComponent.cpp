@@ -60,18 +60,18 @@ void UPSWeaponComponent::AddClips(TSubclassOf<APSWeaponBase> WeaponClass, int32 
 			return;
 		}
 	}
-	SpawnNewWeapon(WeaponClass);
+	SpawnNewWeapon(WeaponClass, ClipsAmount);
 }
 
 void UPSWeaponComponent::SpawnWeapons()
 {
-	for(const auto WeaponClass : WeaponsClasses)
+	for(const auto& WeaponStruct : WeaponsStruct)
 	{
-		SpawnNewWeapon(WeaponClass);
+		SpawnNewWeapon(WeaponStruct.Key, WeaponStruct.Value);
 	}
 }
 
-void UPSWeaponComponent::SpawnNewWeapon(TSubclassOf<APSWeaponBase> WeaponClass)
+void UPSWeaponComponent::SpawnNewWeapon(TSubclassOf<APSWeaponBase> WeaponClass, int32 ClipsAmount)
 {
 	const auto CharacterBase = GetOwner<APSCharacterBase>();
 	if(!GetWorld() || !CharacterBase || !CharacterBase->GetMainMesh()) return;
@@ -80,7 +80,6 @@ void UPSWeaponComponent::SpawnNewWeapon(TSubclassOf<APSWeaponBase> WeaponClass)
 	if(!Weapon) return;
 
 	const FAttachmentTransformRules AttachmentRules(EAttachmentRule::SnapToTarget, false);
-
 	Weapon->AttachToComponent(CharacterBase->GetMainMesh(), AttachmentRules, Weapon->GetWeaponData().AttachSocketName);
 	Weapon->SetOwner(CharacterBase);
 
@@ -102,6 +101,7 @@ void UPSWeaponComponent::SpawnNewWeapon(TSubclassOf<APSWeaponBase> WeaponClass)
 	if(OutMagazineNotify) OutMagazineNotify->OnMagazineOut.AddUObject(this, &UPSWeaponComponent::OnOutMagazine);
 
 	AddWeapon(Weapon);
+	AddClips(WeaponClass, ClipsAmount);
 }
 
 bool UPSWeaponComponent::SetCurrentWeapon(int32 WeaponIndex)
@@ -155,76 +155,6 @@ void UPSWeaponComponent::OnReloadFinished(USkeletalMeshComponent* MeshComponent)
 		IsReloading = false;
 }
 
-void UPSWeaponComponent::StartFire()
-{
-	if(!CanFire()) return;
-
-	CurrentWeapon->StartFire();
-}
-
-void UPSWeaponComponent::StopFire()
-{
-	if(!CurrentWeapon) return;
-
-	CurrentWeapon->StopFire();
-}
-
-bool UPSWeaponComponent::CanFire()
-{
-	return CurrentWeapon && !IsEquiping && !IsReloading;
-}
-
-void UPSWeaponComponent::OnClipEmpty(APSWeaponBase* EmptyWeapon)
-{
-	if(!EmptyWeapon) return;
-	if(CurrentWeapon != EmptyWeapon) EmptyWeapon->ChangeClip();
-
-	StopFire();
-	ChangeClip();
-}
-
-void UPSWeaponComponent::ChangeClip()
-{
-	if(!CanReload()) return;
-
-	IsReloading = true;
-	PSUtils::PlayMontage(GetOwner(), CurrentWeapon->GetWeaponAnimData().ReloadAnimMontage);
-	CurrentWeapon->ChangeClip();
-}
-
-void UPSWeaponComponent::SpawnAmmoBox()
-{
-	if(!AmmoBoxPickupClass || !GetWorld() || !GetOwner()) return;
-
-	const FTransform SpawnTransform(GetOwner()->GetActorLocation());
-	const auto AmmoBox = GetWorld()->SpawnActorDeferred<APSAmmoBoxPickup>(AmmoBoxPickupClass, SpawnTransform);
-	if(!AmmoBox) return;
-	
-	for(const auto Weapon : Weapons)
-	{
-		if(Weapon && !Weapon->GetAmmoData().IsInfinite && !Weapon->IsAmmoEmpty()) AmmoBox->AddWeapon(Weapon->GetClass(), Weapon->GetAmmoData().Clips);
-	}
-	
-	AmmoBox->FinishSpawning(SpawnTransform);
-}
-
-bool UPSWeaponComponent::CanReload()
-{
-	return CurrentWeapon && !IsEquiping && !IsReloading && CurrentWeapon->CanReload();
-}
-
-void UPSWeaponComponent::GetAmmoData(FAmmoData& AmmoData) const
-{
-	if(!CurrentWeapon) return;
-	AmmoData = CurrentWeapon->GetAmmoData();
-}
-
-void UPSWeaponComponent::GetAnimData(FWeaponAnimData& AnimData) const
-{
-	if(!CurrentWeapon) return;
-	AnimData = CurrentWeapon->GetWeaponAnimData();
-}
-
 void UPSWeaponComponent::OnStartSetupMagazine(USkeletalMeshComponent* MeshComponent)
 {
 	const auto Character = GetOwner<APSCharacterBase>();
@@ -248,3 +178,86 @@ void UPSWeaponComponent::OnOutMagazine(USkeletalMeshComponent* MeshComponent)
 
 	CurrentWeapon->OutMagazine();
 }
+
+void UPSWeaponComponent::StartFire()
+{
+	if(!CanFire()) return;
+
+	CurrentWeapon->StartFire();
+}
+
+void UPSWeaponComponent::StopFire()
+{
+	if(!CurrentWeapon) return;
+
+	CurrentWeapon->StopFire();
+}
+
+bool UPSWeaponComponent::CanFire()
+{
+	return CurrentWeapon && !IsEquiping && !IsReloading;
+}
+
+void UPSWeaponComponent::OnClipEmpty(APSWeaponBase* EmptyWeapon)
+{
+	if(!EmptyWeapon) return;
+	if(CurrentWeapon != EmptyWeapon)
+	{
+		EmptyWeapon->ChangeClip();
+		return;
+	}
+
+	StopFire();
+	ChangeClip();
+}
+
+void UPSWeaponComponent::ChangeClip()
+{
+	if(!CanReload()) return;
+
+	IsReloading = true;
+	PSUtils::PlayMontage(GetOwner(), CurrentWeapon->GetWeaponAnimData().ReloadAnimMontage);
+	CurrentWeapon->ChangeClip();
+}
+
+void UPSWeaponComponent::SpawnAmmoBox()
+{
+	if(!AmmoBoxPickupClass || !GetWorld() || !GetOwner()) return;
+
+	const auto SpawnLocation = APSPickupBase::GetSpawnLocationSnapedToFloor(GetWorld(), GetOwner()->GetActorLocation());
+	const FTransform SpawnTransform(SpawnLocation);
+	const auto AmmoBox = GetWorld()->SpawnActorDeferred<APSAmmoBoxPickup>(AmmoBoxPickupClass, SpawnTransform);
+	if(!AmmoBox) return;
+
+	for(const auto Weapon : Weapons)
+	{
+		if(Weapon && !Weapon->GetAmmoData().IsInfinite && Weapon->GetAmmoData().Clips)
+			AmmoBox->AddWeapon(Weapon->GetClass(), Weapon->GetAmmoData().Clips);
+	}
+
+	AmmoBox->FinishSpawning(SpawnTransform);
+}
+
+bool UPSWeaponComponent::CanReload()
+{
+	return CurrentWeapon && !IsEquiping && !IsReloading && CurrentWeapon->CanReload();
+}
+
+void UPSWeaponComponent::GetAmmoData(FAmmoData& AmmoData) const
+{
+	if(!CurrentWeapon) return;
+	AmmoData = CurrentWeapon->GetAmmoData();
+}
+
+void UPSWeaponComponent::GetAnimData(FWeaponAnimData& AnimData) const
+{
+	if(!CurrentWeapon) return;
+	AnimData = CurrentWeapon->GetWeaponAnimData();
+}
+
+void UPSWeaponComponent::GetUIData(FWeaponUIData& WeaponUIData) const
+{
+	if(!CurrentWeapon) return;
+	WeaponUIData = CurrentWeapon->GetWeaponUIData();
+}
+
