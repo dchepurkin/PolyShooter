@@ -11,7 +11,7 @@ class POLYSHOOTER_API APSAutoShotWeapon : public APSBulletWeapon
 {
 	GENERATED_BODY()
 public:
-	virtual void OutMagazine() override;
+	virtual void StartReload() override;
 	
 protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category=PSWeaponBase, meta=(ClampMin = "0.01"))

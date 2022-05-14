@@ -16,7 +16,7 @@ void APSBulletWeapon::MakeShot()
 	FVector EndTrace;
 
 	if(GetTraceData(StartTrace, EndTrace))
-		FireLineTrace(HitResult, StartTrace, EndTrace);
+		MakeTrace(HitResult, StartTrace, EndTrace);
 
 	if(HitResult.bBlockingHit) { MakeDamage(HitResult); }
 

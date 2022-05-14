@@ -20,8 +20,8 @@ void APSAutoShotWeapon::StopFire()
 	GetWorldTimerManager().ClearTimer(FireTimer);
 }
 
-void APSAutoShotWeapon::OutMagazine()
+void APSAutoShotWeapon::StartReload()
 {
-	Super::OutMagazine();
+	Super::StartReload();
 	SpawnMagazine(WeaponData.MagazineOutSocketName);
 }

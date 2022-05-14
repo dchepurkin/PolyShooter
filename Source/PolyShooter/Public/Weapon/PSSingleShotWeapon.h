@@ -13,9 +13,9 @@ class POLYSHOOTER_API APSSingleShotWeapon : public APSBulletWeapon
 
 public:
 	virtual bool IsFire() override { return FireInProgress; }
+	virtual void OnEndFireAnim() override;
 
 protected:
 	virtual void StartFire() override;
 	virtual void StopFire() override {};
-	virtual void OnFireAnimFinished(USkeletalMeshComponent* MeshComponent) override;
 };

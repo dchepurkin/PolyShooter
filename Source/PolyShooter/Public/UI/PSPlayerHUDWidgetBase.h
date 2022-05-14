@@ -3,17 +3,18 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Blueprint/UserWidget.h"
 #include "PSCoreTypes.h"
+#include "PSWidgetBase.h"
 #include "PSPlayerHUDWidgetBase.generated.h"
 
 class APSWeaponBase;
 class UProgressBar;
 class UTextBlock;
 class UImage;
+class UWidgetAnimation;
 
 UCLASS()
-class POLYSHOOTER_API UPSPlayerHUDWidgetBase : public UUserWidget
+class POLYSHOOTER_API UPSPlayerHUDWidgetBase : public UPSWidgetBase
 {
 	GENERATED_BODY()
 
@@ -51,8 +52,15 @@ protected:
 	UPROPERTY(meta=(BindWidget))
 	UTextBlock* PlayerLifesTextBlock;
 
+	UPROPERTY(Transient, meta=(BindWidgetAnim))
+	UWidgetAnimation* DamageAnimation;
+
 private:
+	UFUNCTION()
+	void OnTakeAnyDamage(AActor* DamagedActor, float Damage, const UDamageType* DamageType, AController* InstigatedBy, AActor* DamageCauser);
+
 	void OnPawnChanged(APawn* NewPawn);
-	void OnHealthChanged(const float HealthPercent);	
+	void OnHealthChanged(const float HealthPercent);
 	void UpdateHealthBar();
+	void PlayWindgetAnimation(UWidgetAnimation* Animation);
 };

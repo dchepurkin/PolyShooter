@@ -13,8 +13,8 @@ void APSSingleShotWeapon::StartFire()
 	Super::StartFire();
 }
 
-void APSSingleShotWeapon::OnFireAnimFinished(USkeletalMeshComponent* MeshComponent)
+void APSSingleShotWeapon::OnEndFireAnim()
 {
 	FireInProgress = false;
-	Super::OnFireAnimFinished(MeshComponent);	
+	Super::OnEndFireAnim();	
 }

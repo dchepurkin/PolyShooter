@@ -25,7 +25,7 @@ void APSProjectileWeapon::MakeShot()
 	FVector EndTrace;
 
 	if(GetTraceData(StartTrace, EndTrace))
-		FireLineTrace(HitResult, StartTrace, EndTrace);
+		MakeTrace(HitResult, StartTrace, EndTrace);
 
 	const auto EndPoint = HitResult.bBlockingHit ? HitResult.ImpactPoint : EndTrace;
 	const FVector Direction = (EndPoint - WeaponMesh->GetSocketLocation(WeaponData.MuzzleSocketName)).GetSafeNormal();
@@ -35,10 +35,10 @@ void APSProjectileWeapon::MakeShot()
 	Super::MakeShot();
 }
 
-void APSProjectileWeapon::OnFireAnimFinished(USkeletalMeshComponent* MeshComponent)
+void APSProjectileWeapon::OnEndFireAnim()
 {
 	FireInProgress = false;
-	Super::OnFireAnimFinished(MeshComponent);
+	Super::OnEndFireAnim();
 }
 
 void APSProjectileWeapon::SpawnProjectile(const FVector& Direction)

@@ -26,7 +26,6 @@ public:
 	void AddClips(TSubclassOf<APSWeaponBase> WeaponClass, int32 ClipsAmount);
 	void EquipWeapon(int32 WeaponIndex);
 
-	UFUNCTION(BlueprintCallable)
 	void GetAmmoData(FAmmoData& AmmoData) const;
 	void GetAnimData(FWeaponAnimData& AnimData) const;
 	void GetUIData(FWeaponUIData& WeaponUIData) const;
@@ -37,12 +36,19 @@ public:
 
 	void SpawnAmmoBox();
 
+	void OnEquipFinished() { IsEquiping = false; }
+	void OnReloadFinished() { IsReloading = false; }
+	void OnReloadStarted();
+	void OnStartSetupMagazine();
+	void OnEndSetupMagazine();
+	void OnEndFireAnim();
+
 protected:
 	virtual void BeginPlay() override;
 	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category=PSWeaponComponent)
-	TMap<TSubclassOf<APSWeaponBase>, int32> WeaponsStruct;
+	TMap<TSubclassOf<APSWeaponBase>, int32> StartWeapons;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category=PSWeaponComponent)
 	TSubclassOf<APSAmmoBoxPickup> AmmoBoxPickupClass;
@@ -58,11 +64,6 @@ private:
 	void SpawnWeapons();
 	void SpawnNewWeapon(TSubclassOf<APSWeaponBase> WeaponClass, int32 ClipsAmount);
 
-	void OnEquipFinished(USkeletalMeshComponent* MeshComponent);
-	void OnReloadFinished(USkeletalMeshComponent* MeshComponent);
-	void OnStartSetupMagazine(USkeletalMeshComponent* MeshComponent);
-	void OnEndSetupMagazine(USkeletalMeshComponent* MeshComponent);
-	void OnOutMagazine(USkeletalMeshComponent* MeshComponent);
 	void OnClipEmpty(APSWeaponBase* EmptyWeapon);
 
 	bool SetCurrentWeapon(int32 WeaponIndex);

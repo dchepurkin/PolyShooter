@@ -2,8 +2,15 @@
 
 #include "Animation/PSEndFireAnimNotify.h"
 
-void UPSEndFireAnimNotify::Notify(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation,
-                                  const FAnimNotifyEventReference& EventReference)
+#include "PSWeaponComponent.h"
+
+FString UPSEndFireAnimNotify::GetNotifyName_Implementation() const
 {
-	OnFireFinished.Broadcast(MeshComp);
+	FString NotifyName = "Fire Finished";
+	return NotifyName;
+}
+
+void UPSEndFireAnimNotify::OnNotifyEnd(UPSWeaponComponent* WeaponComponent)
+{
+	if(WeaponComponent) WeaponComponent->OnEndFireAnim();
 }

@@ -1,8 +1,6 @@
 // PolyShooter By DChepurkin
 
 #include "Weapon/PSWeaponBase.h"
-#include "DrawDebugHelpers.h"
-#include "PSEndFireAnimNotify.h"
 #include "PSMagazineBase.h"
 #include "PSUtils.h"
 #include "Kismet/GameplayStatics.h"
@@ -36,16 +34,10 @@ void APSWeaponBase::BeginPlay()
 
 	SetVisibility(false);
 	SetInfinite(DefaultAmmoData.IsInfinite);
-
-	const auto FireEndNotify = PSUtils::FindFirstNotify<UPSEndFireAnimNotify>(WeaponAnimData.FireAnimMontage);
-	if(FireEndNotify) FireEndNotify->OnFireFinished.AddUObject(this, &APSWeaponBase::OnFireAnimFinished);
 }
 
-void APSWeaponBase::OnFireAnimFinished(USkeletalMeshComponent* MeshComponent)
+void APSWeaponBase::OnEndFireAnim()
 {
-	const auto Character = GetOwner<APSCharacterBase>();
-	if(!Character || Character->GetMainMesh() != MeshComponent) return;
-
 	if(IsClipEmpty()) OnClipEmpty.Broadcast(this);
 }
 
@@ -61,9 +53,7 @@ bool APSWeaponBase::IsAmmoEmpty()
 
 void APSWeaponBase::SetVisibility(bool Visible)
 {
-	if(!WeaponMesh) return;
-
-	WeaponMesh->SetVisibility(Visible, true);
+	if(WeaponMesh) WeaponMesh->SetVisibility(Visible, true);
 }
 
 void APSWeaponBase::StartFire()
@@ -84,6 +74,7 @@ bool APSWeaponBase::GetTraceData(FVector& StartTrace, FVector& EndTrace)
 	if(!GetPlayerViewPoint(ViewLocation, ViewRotation)) return false;
 
 	StartTrace = ViewLocation;
+
 	const auto ShootDirection = FMath::VRandCone(ViewRotation.Vector(), FMath::DegreesToRadians(BulletSpread));
 	EndTrace = ShootDirection * FireDistance + StartTrace;
 
@@ -111,7 +102,7 @@ void APSWeaponBase::GetMuzzleSocketTransform(FVector& ViewLocation, FRotator& Vi
 	ViewRotation = WeaponMesh->GetSocketRotation(WeaponData.MuzzleSocketName);
 }
 
-void APSWeaponBase::FireLineTrace(FHitResult& HitResult, const FVector& StartTrace, const FVector& EndTrace)
+void APSWeaponBase::MakeTrace(FHitResult& HitResult, const FVector& StartTrace, const FVector& EndTrace)
 {
 	if(!GetWorld() || !GetOwner()) return;
 
@@ -132,8 +123,7 @@ void APSWeaponBase::MakeShot()
 
 void APSWeaponBase::DecreaseAmmo()
 {
-	if(AmmoData.Bullets)
-		--AmmoData.Bullets;
+	if(AmmoData.Bullets) --AmmoData.Bullets;
 }
 
 void APSWeaponBase::SetInfinite(bool Infinite)
@@ -159,7 +149,7 @@ bool APSWeaponBase::CanFire()
 
 void APSWeaponBase::SetMagazineVisible(bool Visibility)
 {
-	MagazineMesh->SetVisibility(Visibility);
+	if(MagazineMesh) MagazineMesh->SetVisibility(Visibility);
 }
 
 UStaticMesh* APSWeaponBase::GetMagazineMesh()
@@ -180,7 +170,7 @@ void APSWeaponBase::EndSetupMagazine()
 	SetMagazineVisible(true);
 }
 
-void APSWeaponBase::OutMagazine()
+void APSWeaponBase::StartReload()
 {
 	SetMagazineVisible(false);
 }

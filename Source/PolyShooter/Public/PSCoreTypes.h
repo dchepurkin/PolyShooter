@@ -23,7 +23,7 @@ struct FAmmoData
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category=Weapon,
 		meta=(ClampMin = "0", EditCondition="!IsInfinite"))
-	int32 Clips = 0;	
+	int32 Clips = 0;
 };
 
 USTRUCT(BlueprintType)
@@ -127,4 +127,13 @@ struct FPlayerData
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, meta=(ClampMin = "1"))
 	int32 MaxLifes = 9;
+};
+
+//GameState
+UENUM()
+enum class EGameState:uint8
+{
+	InProgress,
+	Pause,
+	GameOver
 };

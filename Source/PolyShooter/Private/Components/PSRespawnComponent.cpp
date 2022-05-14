@@ -3,7 +3,7 @@
 #include "Components/PSRespawnComponent.h"
 
 #include "PSGameInstance.h"
-#include "PSGameModeBase.h"
+#include "PSLevelGameModeBase.h"
 
 DEFINE_LOG_CATEGORY_STATIC(LogPSRespawnComponent, All, All);
 
@@ -35,9 +35,9 @@ void UPSRespawnComponent::UpdateRespawnTimer()
 	if(!--RespawnCountDown && GetWorld())
 	{
 		GetWorld()->GetTimerManager().ClearTimer(RespawnTimerHandle);
-		const auto GameMode = GetWorld()->GetAuthGameMode<APSGameModeBase>();
+		const auto GameMode = GetWorld()->GetAuthGameMode<APSLevelGameModeBase>();
 
-		if(GameMode) GameMode->RespawnPlayer(GetOwner<AController>());		
+		if(GameMode) GameMode->RespawnPlayer(GetOwner<AController>());
 	}
 }
 
@@ -50,6 +50,8 @@ bool UPSRespawnComponent::CanRespawn() const
 
 void UPSRespawnComponent::GameOver()
 {
-	UE_LOG(LogPSRespawnComponent, Display, TEXT("-----GAME OVER-----"));
-	//TODO GameOver in GameMode
+	if(!GetWorld()) return;
+
+	const auto GameMode = GetWorld()->GetAuthGameMode<APSLevelGameModeBase>();
+	if(GameMode) GameMode->GameOver();
 }

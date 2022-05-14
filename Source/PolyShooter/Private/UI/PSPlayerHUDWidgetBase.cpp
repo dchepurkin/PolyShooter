@@ -26,6 +26,8 @@ void UPSPlayerHUDWidgetBase::OnPawnChanged(APawn* NewPawn)
 {
 	if(!NewPawn) return;
 
+	NewPawn->OnTakeAnyDamage.AddDynamic(this, &UPSPlayerHUDWidgetBase::OnTakeAnyDamage);
+
 	if(const auto HealthComponent = NewPawn->FindComponentByClass<UPSHealthComponent>())
 	{
 		HealthComponent->OnHealthChanged.AddUObject(this, &UPSPlayerHUDWidgetBase::OnHealthChanged);
@@ -54,6 +56,16 @@ void UPSPlayerHUDWidgetBase::UpdateHealthBar()
 {
 	const auto HealthProgressBarColor = FMath::Lerp(BadColor, GoodColor, GetPlayerHealthPercent());
 	HealthProgressBar->SetFillColorAndOpacity(HealthProgressBarColor);
+}
+
+void UPSPlayerHUDWidgetBase::OnTakeAnyDamage(AActor* DamagedActor, float Damage, const UDamageType* DamageType, AController* InstigatedBy, AActor* DamageCauser)
+{
+	PlayWindgetAnimation(DamageAnimation);
+}
+
+void UPSPlayerHUDWidgetBase::PlayWindgetAnimation(UWidgetAnimation* Animation)
+{
+	if(!IsSpectating() && !IsAnimationPlaying(Animation)) PlayAnimation(Animation);
 }
 
 void UPSPlayerHUDWidgetBase::GetAmmoData(FAmmoData& AmmoData) const

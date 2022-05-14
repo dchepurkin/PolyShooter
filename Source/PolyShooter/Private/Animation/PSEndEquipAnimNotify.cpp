@@ -1,13 +1,17 @@
 // PolyShooter By DChepurkin
 
 #include "Animation/PSEndEquipAnimNotify.h"
+#include "PSWeaponComponent.h"
 
 DEFINE_LOG_CATEGORY_STATIC(LogPSEndEquipAnimNotify, All, All)
 
-void UPSEndEquipAnimNotify::Notify(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation,
-                                   const FAnimNotifyEventReference& EventReference)
+FString UPSEndEquipAnimNotify::GetNotifyName_Implementation() const
 {
-	Super::Notify(MeshComp, Animation, EventReference);
+	FString NotiFyName = "Finish Equip";
+	return NotiFyName;
+}
 
-	OnEquipFinished.Broadcast(MeshComp);
+void UPSEndEquipAnimNotify::OnNotifyEnd(UPSWeaponComponent* WeaponComponent)
+{
+	if(WeaponComponent) WeaponComponent->OnEquipFinished();
 }

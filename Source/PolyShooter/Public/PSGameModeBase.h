@@ -11,8 +11,7 @@ class POLYSHOOTER_API APSGameModeBase : public AGameModeBase
 {
 	GENERATED_BODY()
 
-public:
-	APSGameModeBase();
-
-	void RespawnPlayer(AController* Controller);
+protected:
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category=PSGameMode)
+	FString NextLevelName = "LevelName";	
 };

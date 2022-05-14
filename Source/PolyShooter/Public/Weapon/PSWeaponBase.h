@@ -43,7 +43,8 @@ public:
 
 	virtual void StartSetupMagazine();
 	virtual void EndSetupMagazine();
-	virtual void OutMagazine();
+	virtual void StartReload();
+	virtual void OnEndFireAnim();
 
 	void AddClips(int32 ClipsAmount);
 
@@ -87,10 +88,9 @@ protected:
 
 	bool CanFire();
 	bool GetTraceData(FVector& StartTrace, FVector& EndTrace);
-	void FireLineTrace(FHitResult& HitResult, const FVector& StartTrace, const FVector& EndTrace);
+	void MakeTrace(FHitResult& HitResult, const FVector& StartTrace, const FVector& EndTrace);
 
-	virtual void MakeShot();
-	virtual void OnFireAnimFinished(USkeletalMeshComponent* MeshComponent);
+	virtual void MakeShot();	
 
 	void SetMagazineVisible(bool Visibility);
 	void SpawnMagazine(const FName& SocketName);
