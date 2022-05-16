@@ -12,7 +12,7 @@ UCLASS()
 class POLYSHOOTER_API UPSPauseWidget : public UPSWidgetBase
 {
 	GENERATED_BODY()
-
+	
 protected:
 	virtual void NativeOnInitialized() override;
 

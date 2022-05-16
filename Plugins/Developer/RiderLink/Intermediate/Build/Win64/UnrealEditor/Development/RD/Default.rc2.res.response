@@ -62,6 +62,7 @@
 /DBUILD_VERSION=++UE5+Release-5.0-CL-19505902
 /DBUILD_ICON_FILE_NAME="\"..\\Build\\Windows\\Resources\\Default.ico\""
 /DPROJECT_COPYRIGHT_STRING="PolyShooter By DChepurkin"
+/DPROJECT_PRODUCT_NAME="ACCESS DENIED"
 /DPROJECT_PRODUCT_IDENTIFIER=PolyShooter
 /fo "D:\Unreal Projects\Shooter\PolyShooter\Plugins\Developer\RiderLink\Intermediate\Build\Win64\UnrealEditor\Development\RD\Default.rc2.res"
 "..\Build\Windows\Resources\Default.rc2"

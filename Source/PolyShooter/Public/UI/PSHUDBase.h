@@ -13,20 +13,19 @@ UCLASS()
 class POLYSHOOTER_API APSHUDBase : public AHUD
 {
 	GENERATED_BODY()
+public:
+	void ShowQuitGameQuiestion(bool Show);
 
 protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category=PSHUDBase)
-	TSubclassOf<UPSWidgetBase> PlayerHUDWidgetClass;
+	TMap<EGameState, TSubclassOf<UPSWidgetBase>> StateWidgetsClasses;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category=PSHUDBase)
-	TSubclassOf<UPSWidgetBase> PauseWidgetClass;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category=PSHUDBase)
-	TSubclassOf<UPSWidgetBase> GameOverWidgetClass;
+	TSubclassOf<UPSWidgetBase> QuitGameQuestionWidgetClass;
 
 	virtual void BeginPlay() override;
-	
-private:
+
+private:	
 	UPROPERTY()
 	TMap<EGameState, UPSWidgetBase*> Widgets;
 
@@ -34,4 +33,5 @@ private:
 	UPSWidgetBase* CurrentWidget;
 
 	void OnGameStateChanged(EGameState GameState);
+	void CreateSubWidget(TSubclassOf<UPSWidgetBase> WidgetClass);
 };

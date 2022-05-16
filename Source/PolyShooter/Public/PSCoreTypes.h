@@ -1,4 +1,5 @@
 #pragma once
+#include "SPSLoadingScreen.h"
 
 #include "PSCoreTypes.generated.h"
 

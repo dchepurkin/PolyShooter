@@ -5,18 +5,23 @@
 #include "PSLevelGameModeBase.h"
 #include "PSWidgetBase.h"
 
+DEFINE_LOG_CATEGORY_STATIC(LogHUDBase, All, All);
+
+void APSHUDBase::ShowQuitGameQuiestion(bool Show)
+{
+	if(CurrentWidget) CurrentWidget->SetVisibility(Show ? ESlateVisibility::Hidden : ESlateVisibility::Visible);
+	if(Show) CreateSubWidget(QuitGameQuestionWidgetClass);
+}
+
 void APSHUDBase::BeginPlay()
 {
 	Super::BeginPlay();
 
-	if(PlayerHUDWidgetClass)
-		Widgets.Add(EGameState::InProgress, CreateWidget<UPSWidgetBase>(GetOwningPlayerController(), PlayerHUDWidgetClass, "PlayerHUDWidget"));
-
-	if(PauseWidgetClass)
-		Widgets.Add(EGameState::Pause, CreateWidget<UPSWidgetBase>(GetOwningPlayerController(), PauseWidgetClass, "PauseWidget"));
-
-	if(GameOverWidgetClass)
-		Widgets.Add(EGameState::GameOver, CreateWidget<UPSWidgetBase>(GetOwningPlayerController(), GameOverWidgetClass, "GameOverWidget"));
+	for(const auto& StateWidgetClass : StateWidgetsClasses)
+	{
+		if(StateWidgetClass.Value)
+			Widgets.Add(StateWidgetClass.Key, CreateWidget<UPSWidgetBase>(GetOwningPlayerController(), StateWidgetClass.Value));
+	}
 
 	for(const auto WidgetPair : Widgets)
 	{
@@ -44,5 +49,16 @@ void APSHUDBase::OnGameStateChanged(EGameState GameState)
 	{
 		CurrentWidget->SetVisibility(ESlateVisibility::Visible);
 		CurrentWidget->Show();
+	}
+}
+
+void APSHUDBase::CreateSubWidget(TSubclassOf<UPSWidgetBase> WidgetClass)
+{
+	if(!WidgetClass) return;
+	
+	if(const auto SubWidget = CreateWidget<UPSWidgetBase>(GetOwningPlayerController(), WidgetClass))
+	{
+		SubWidget->AddToViewport();
+		SubWidget->Show();
 	}
 }

@@ -38,7 +38,7 @@ void APSPlayerController::BeginPlay()
 {
 	Super::BeginPlay();
 
-	InputComponent->BindAction("Pause", IE_Pressed, this, &APSPlayerController::OnPauseGame).bExecuteWhenPaused = true;
+	InputComponent->BindAction("Pause", IE_Pressed, this, &APSPlayerController::OnPauseGame);
 
 	const auto GameMode = GetWorld()->GetAuthGameMode<APSLevelGameModeBase>();
 	if(GameMode) GameMode->OnGameStateChanged.AddUObject(this, &APSPlayerController::OnGameStateChanged);
@@ -61,6 +61,6 @@ void APSPlayerController::OnGameStateChanged(EGameState GameState)
 	GameState == EGameState::InProgress
 		? SetInputMode(FInputModeGameOnly())
 		: SetInputMode(FInputModeGameAndUI());
-	
+
 	SetShowMouseCursor(GameState == EGameState::InProgress ? false : true);
 }

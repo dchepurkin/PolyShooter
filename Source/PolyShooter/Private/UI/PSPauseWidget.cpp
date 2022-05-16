@@ -3,6 +3,9 @@
 #include "UI/PSPauseWidget.h"
 
 #include "Components/Button.h"
+#include "Components/WidgetSwitcher.h"
+
+DEFINE_LOG_CATEGORY_STATIC(LogPauseWidget, All, All);
 
 void UPSPauseWidget::NativeOnInitialized()
 {

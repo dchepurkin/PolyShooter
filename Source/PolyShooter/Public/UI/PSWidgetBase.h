@@ -15,7 +15,7 @@ class POLYSHOOTER_API UPSWidgetBase : public UUserWidget
 
 public:
 	void Show();
-
+	
 protected:
 	UPROPERTY(Transient, meta=(BindWidgetAnim))
 	UWidgetAnimation* ShowAnimation;
