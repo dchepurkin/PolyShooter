@@ -7,8 +7,6 @@
 #include "PSPlayerController.h"
 #include "UI/PSHUDBase.h"
 
-DEFINE_LOG_CATEGORY_STATIC(LogPSGameMode, All, All);
-
 APSLevelGameModeBase::APSLevelGameModeBase()
 {
 	DefaultPawnClass = APSPlayerCharacter::StaticClass();
@@ -19,7 +17,6 @@ APSLevelGameModeBase::APSLevelGameModeBase()
 void APSLevelGameModeBase::StartPlay()
 {
 	Super::StartPlay();
-
 	SetGameState(EGameState::InProgress);
 }
 
@@ -43,6 +40,5 @@ void APSLevelGameModeBase::GameOver()
 		Pawn->TurnOff();
 		Pawn->DisableInput(nullptr);
 	}
-
 	SetGameState(EGameState::GameOver);
 }

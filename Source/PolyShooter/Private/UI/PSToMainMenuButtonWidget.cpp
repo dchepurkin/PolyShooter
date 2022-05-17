@@ -2,8 +2,7 @@
 
 #include "UI/PSToMainMenuButtonWidget.h"
 
-#include "PSHUDBase.h"
-#include "PSQuitGameQuestionWidget.h"
+#include "PSHUDLevel.h"
 #include "Components/Button.h"
 
 void UPSToMainMenuButtonWidget::NativeOnInitialized()
@@ -15,6 +14,6 @@ void UPSToMainMenuButtonWidget::NativeOnInitialized()
 
 void UPSToMainMenuButtonWidget::OnToMainMenu()
 {
-	if(!GetOwningPlayer() || !GetOwningPlayer()->GetHUD<APSHUDBase>()) return;
-	GetOwningPlayer()->GetHUD<APSHUDBase>()->ShowQuitGameQuiestion(true);
+	if(!GetOwningPlayer() || !GetOwningPlayer()->GetHUD<APSHUDLevel>()) return;
+	GetOwningPlayer()->GetHUD<APSHUDLevel>()->ShowQuitGameQuiestion(true);
 }

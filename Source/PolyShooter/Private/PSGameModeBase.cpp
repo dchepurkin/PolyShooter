@@ -3,6 +3,8 @@
 #include "PSGameModeBase.h"
 
 #include "PSGameInstance.h"
+#include "PSHUDBase.h"
+#include "PSUtils.h"
 #include "Blueprint/UserWidget.h"
 #include "Kismet/GameplayStatics.h"
 
@@ -26,5 +28,12 @@ void APSGameModeBase::ToMenu()
 
 void APSGameModeBase::StartLevel(const FName& LevelName)
 {
-	UGameplayStatics::OpenLevel(GetWorld(), LevelName);
+	const auto Controller = PSUtils::GetPlayerController(GetWorld());
+	if(!Controller) return;
+
+	const auto HUD = Controller->GetHUD<APSHUDBase>();
+	if(!HUD) return;
+	
+	HUD->ShowLoadingScreen();
+	HUD->OnLoadingScreenFinished.AddWeakLambda(this, [&LevelName, this]() { UGameplayStatics::OpenLevel(GetWorld(), LevelName); });
 }

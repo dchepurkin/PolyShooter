@@ -1,4 +1,5 @@
 #pragma once
+#include "PSWidgetBase.h"
 #include "SPSLoadingScreen.h"
 
 #include "PSCoreTypes.generated.h"
@@ -137,4 +138,17 @@ enum class EGameState:uint8
 	InProgress,
 	Pause,
 	GameOver
+};
+
+//UI
+USTRUCT(BlueprintType)
+struct FWidgetsData
+{
+	GENERATED_BODY()
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+	EGameState GameState;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+	TSubclassOf<UPSWidgetBase> WidgetClass;
 };

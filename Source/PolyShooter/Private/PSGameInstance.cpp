@@ -2,8 +2,7 @@
 
 #include "PSGameInstance.h"
 
-#include "MoviePlayer.h"
-#include "SPSLoadingScreen.h"
+#include "PSUtils.h"
 #include "PSWeaponBase.h"
 #include "Kismet/GameplayStatics.h"
 
@@ -19,7 +18,6 @@ void UPSGameInstance::Init()
 
 void UPSGameInstance::StartGame()
 {
-	UE_LOG(LogPSGameInstance,Display,TEXT("Start"))
 	CurrentLifes = PlayerData.Lifes;
 }
 
@@ -45,12 +43,10 @@ void UPSGameInstance::SetPlayerLifes(const int32 NewLifeAmount)
 
 void UPSGameInstance::OnOpenLevel(UWorld* World)
 {
-	if(!World ||
-		!World->GetFirstPlayerController() ||
-		!World->GetFirstPlayerController()->PlayerCameraManager)
-		return;
+	const auto Controller = PSUtils::GetPlayerController(World);
+	if(!Controller)	return;
 
-	World->GetFirstPlayerController()->PlayerCameraManager->StartCameraFade(1.0f, 0.0f, StartLevelCameraFadeOutDuration, FLinearColor::Black);
+	Controller->PlayerCameraManager->StartCameraFade(1.0f, 0.0f, StartLevelCameraFadeOutDuration, FLinearColor::Black);
 }
 
 void UPSGameInstance::SaveAmmoData(const TMap<TSubclassOf<APSWeaponBase>, FAmmoData>& PlayerAmmoData) {}

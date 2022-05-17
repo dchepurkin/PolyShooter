@@ -2,7 +2,7 @@
 
 #include "UI/PSQuitGameQuestionWidget.h"
 
-#include "PSHUDBase.h"
+#include "PSHUDLevel.h"
 #include "PSLevelGameModeBase.h"
 #include "Components/Button.h"
 
@@ -25,8 +25,8 @@ void UPSQuitGameQuestionWidget::OnYes()
 
 void UPSQuitGameQuestionWidget::OnNo()
 {
-	if(!GetOwningPlayer() || !GetOwningPlayer()->GetHUD<APSHUDBase>()) return;
+	if(!GetOwningPlayer() || !GetOwningPlayer()->GetHUD<APSHUDLevel>()) return;
 	
-	GetOwningPlayer()->GetHUD<APSHUDBase>()->ShowQuitGameQuiestion(false);
+	GetOwningPlayer()->GetHUD<APSHUDLevel>()->ShowQuitGameQuiestion(false);
 	RemoveFromParent();
 }

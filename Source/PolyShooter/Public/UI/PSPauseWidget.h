@@ -15,7 +15,7 @@ class POLYSHOOTER_API UPSPauseWidget : public UPSWidgetBase
 	
 protected:
 	virtual void NativeOnInitialized() override;
-
+	
 	UPROPERTY(meta=(BindWidget))
 	UButton* ResumeGameButton;
 

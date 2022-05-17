@@ -21,7 +21,7 @@ public:
 	static T* FindFirstNotify(const UAnimMontage* AnimMontage)
 	{
 		if(!AnimMontage) return nullptr;
-		
+
 		const auto& Notifies = AnimMontage->Notifies;
 		for(const auto& NotifyEvent : Notifies)
 		{
@@ -33,10 +33,16 @@ public:
 	static void PlayCameraShake(const APawn* Character, const TSubclassOf<UCameraShakeBase> CameraShake)
 	{
 		if(!Character) return;
-		
+
 		const auto Controller = Character->GetController<APlayerController>();
 		if(!Controller || !Controller->PlayerCameraManager) return;
-		
+
 		Controller->PlayerCameraManager->StartCameraShake(CameraShake);
+	}
+
+	static APlayerController* GetPlayerController(const UWorld* World)
+	{
+		if(!World) return nullptr;
+		return World->GetFirstPlayerController();
 	}
 };

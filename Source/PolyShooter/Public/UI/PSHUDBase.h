@@ -9,29 +9,30 @@
 
 class UPSWidgetBase;
 
+DECLARE_MULTICAST_DELEGATE(FOnLoadingScreenFinishedSignature)
+
 UCLASS()
 class POLYSHOOTER_API APSHUDBase : public AHUD
 {
 	GENERATED_BODY()
+
 public:
-	void ShowQuitGameQuiestion(bool Show);
+	APSHUDBase();
+	
+	void ShowLoadingScreen();
+	FOnLoadingScreenFinishedSignature OnLoadingScreenFinished;
 
 protected:
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category=PSHUDBase)
-	TMap<EGameState, TSubclassOf<UPSWidgetBase>> StateWidgetsClasses;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category="PSHUD|LoadingScreen")
+	TSubclassOf<UPSWidgetBase> LoadingScreenWidgetClass;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category=PSHUDBase)
-	TSubclassOf<UPSWidgetBase> QuitGameQuestionWidgetClass;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category="PSHUD|LoadingScreen", meta=(ClampMin = "0.0"))
+	float LoadingScreenDelay = 3.0f;
 
-	virtual void BeginPlay() override;
-
-private:	
-	UPROPERTY()
-	TMap<EGameState, UPSWidgetBase*> Widgets;
-
-	UPROPERTY()
-	UPSWidgetBase* CurrentWidget;
-
-	void OnGameStateChanged(EGameState GameState);
 	void CreateSubWidget(TSubclassOf<UPSWidgetBase> WidgetClass);
+
+private:
+	FTimerHandle LoadingScreenTimer;
+
+	void OnLoadingScreenTimer();
 };
