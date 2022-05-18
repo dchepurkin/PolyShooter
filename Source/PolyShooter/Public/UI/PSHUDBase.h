@@ -18,11 +18,13 @@ class POLYSHOOTER_API APSHUDBase : public AHUD
 
 public:
 	APSHUDBase();
+	virtual void Tick(float DeltaSeconds) override;
 	
 	void ShowLoadingScreen();
 	FOnLoadingScreenFinishedSignature OnLoadingScreenFinished;
 
 protected:
+	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category="PSHUD|LoadingScreen")
 	TSubclassOf<UPSWidgetBase> LoadingScreenWidgetClass;
 
@@ -33,6 +35,7 @@ protected:
 
 private:
 	FTimerHandle LoadingScreenTimer;
+	FTimerManager LoadingScreenTimerManager;
 
 	void OnLoadingScreenTimer();
 };

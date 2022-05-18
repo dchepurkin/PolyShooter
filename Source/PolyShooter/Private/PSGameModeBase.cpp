@@ -33,7 +33,7 @@ void APSGameModeBase::StartLevel(const FName& LevelName)
 
 	const auto HUD = Controller->GetHUD<APSHUDBase>();
 	if(!HUD) return;
-	
+
 	HUD->ShowLoadingScreen();
-	HUD->OnLoadingScreenFinished.AddWeakLambda(this, [&LevelName, this]() { UGameplayStatics::OpenLevel(GetWorld(), LevelName); });
+	HUD->OnLoadingScreenFinished.AddWeakLambda(this, [this, &LevelName]() { UGameplayStatics::OpenLevel(GetWorld(), LevelName); });
 }

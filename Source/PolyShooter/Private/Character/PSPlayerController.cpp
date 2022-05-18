@@ -5,6 +5,7 @@
 #include "PSGameInstance.h"
 #include "PSLevelGameModeBase.h"
 #include "PSHealthComponent.h"
+#include "Kismet/GameplayStatics.h"
 
 DEFINE_LOG_CATEGORY_STATIC(LogPSPlayerController, All, All);
 
@@ -20,7 +21,7 @@ bool APSPlayerController::SetPause(bool bPause, FCanUnpause CanUnpauseDelegate)
 	const auto GameMode = GetWorld()->GetAuthGameMode<APSLevelGameModeBase>();
 	if(!GameMode || GameMode->GetGameState() == EGameState::GameOver) return false;
 
-	GameMode->SetGameState(!IsPaused() ? EGameState::Pause : EGameState::InProgress);
+	GameMode->SetGameState(bPause ? EGameState::Pause : EGameState::InProgress);
 	return Super::SetPause(bPause, CanUnpauseDelegate);
 }
 

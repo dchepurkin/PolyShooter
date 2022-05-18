@@ -43,6 +43,8 @@ void APSHUDLevel::OnGameStateChanged(EGameState GameState)
 	}
 }
 
+
+
 void APSHUDLevel::ShowQuitGameQuiestion(bool Show)
 {
 	if(CurrentWidget) CurrentWidget->SetVisibility(Show ? ESlateVisibility::Hidden : ESlateVisibility::Visible);

@@ -147,7 +147,7 @@ struct FWidgetsData
 	GENERATED_BODY()
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
-	EGameState GameState;
+	EGameState GameState = EGameState::InProgress;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
 	TSubclassOf<UPSWidgetBase> WidgetClass;

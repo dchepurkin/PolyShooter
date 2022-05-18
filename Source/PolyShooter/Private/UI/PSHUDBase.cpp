@@ -5,14 +5,19 @@
 #include "EngineUtils.h"
 #include "PSWidgetBase.h"
 #include "GameFramework/GameModeBase.h"
+#include "Kismet/GameplayStatics.h"
 
 DEFINE_LOG_CATEGORY_STATIC(LogHUDBase, All, All);
 
 APSHUDBase::APSHUDBase()
 {
-	PrimaryActorTick.bCanEverTick = true;
 	PrimaryActorTick.bTickEvenWhenPaused = true;
-	//SetTickableWhenPaused(true);
+}
+
+void APSHUDBase::Tick(float DeltaSeconds)
+{
+	Super::Tick(DeltaSeconds);
+	LoadingScreenTimerManager.Tick(DeltaSeconds);
 }
 
 void APSHUDBase::CreateSubWidget(TSubclassOf<UPSWidgetBase> WidgetClass)
@@ -35,10 +40,11 @@ void APSHUDBase::ShowLoadingScreen()
 	Controller->SetInputMode(FInputModeGameOnly());
 
 	CreateSubWidget(LoadingScreenWidgetClass);
-	GetWorldTimerManager().SetTimer(LoadingScreenTimer, this, &APSHUDBase::OnLoadingScreenTimer, LoadingScreenDelay, false);
+	LoadingScreenTimerManager.SetTimer(LoadingScreenTimer, this, &APSHUDBase::OnLoadingScreenTimer, LoadingScreenDelay, false);
 }
 
 void APSHUDBase::OnLoadingScreenTimer()
 {
+	LoadingScreenTimerManager.ClearTimer(LoadingScreenTimer);
 	OnLoadingScreenFinished.Broadcast();
 }
