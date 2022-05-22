@@ -7,7 +7,6 @@
 #include "PSPlayerCharacter.generated.h"
 
 class UCameraComponent;
-class UPSWeaponComponent;
 
 UCLASS()
 class POLYSHOOTER_API APSPlayerCharacter : public APSCharacterBase
@@ -30,10 +29,7 @@ protected:
 	USkeletalMeshComponent* FirstPersonMeshComponent;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category=Components)
-	UStaticMeshComponent* MagazineMesh;
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category=Components)
-	UPSWeaponComponent* WeaponComponent;
+	UStaticMeshComponent* MagazineMesh;	
 
 	virtual void BeginPlay() override;
 	virtual void OnDeath() override;
@@ -50,4 +46,6 @@ private:
 
 	void StartFire();
 	void StopFire();
+
+	bool CanFire();
 };

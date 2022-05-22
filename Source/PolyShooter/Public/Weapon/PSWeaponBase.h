@@ -32,7 +32,7 @@ public:
 
 	virtual void StartFire();
 	virtual void StopFire();
-	virtual bool IsFire() { return FireInProgress; }
+	virtual bool IsFire() { return FireInProgress; }	
 
 	bool IsAmmoEmpty();
 	bool IsClipEmpty();

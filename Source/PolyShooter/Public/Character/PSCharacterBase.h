@@ -6,6 +6,7 @@
 #include "GameFramework/Character.h"
 #include "PSCharacterBase.generated.h"
 
+class UPSWeaponComponent;
 class UPSHealthComponent;
 
 UCLASS()
@@ -26,6 +27,9 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category=Components)
 	UPSHealthComponent* HealthComponent;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category=Components)
+	UPSWeaponComponent* WeaponComponent;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category=PSCharacter)
 	float DeathLifeSpan = 5.0f;

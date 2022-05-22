@@ -8,7 +8,17 @@ public class PolyShooter : ModuleRules
 	{
 		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
 
-		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "UMG", "PhysicsCore", "MoviePlayer" });
+		PublicDependencyModuleNames.AddRange(new string[] { "Core", 
+			"CoreUObject", 
+			"Engine", 
+			"InputCore",
+			"UMG",
+			"PhysicsCore",
+			"MoviePlayer",
+			"AnimGraphRuntime",
+			"GameplayTasks",
+			"NavigationSystem"
+		});
 
 		PrivateDependencyModuleNames.AddRange(new string[] { "Slate", "SlateCore"});
 
@@ -23,6 +33,10 @@ public class PolyShooter : ModuleRules
 			"PolyShooter/Public/Weapon",
 			"PolyShooter/Public/Pickup",
 			"PolyShooter/Public/Environments",
+			"PolyShooter/Public/Character/AI",
+			"PolyShooter/Public/AI",
+			"PolyShooter/Public/AI/Services",
+			"PolyShooter/Public/AI/EQSContexts",
 		});
 
 		// Uncomment if you are using Slate UI

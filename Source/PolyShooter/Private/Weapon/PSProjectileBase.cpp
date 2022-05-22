@@ -42,6 +42,7 @@ void APSProjectileBase::BeginPlay()
 	check(ProjectileMovement);
 
 	ProjectileCollision->IgnoreActorWhenMoving(GetOwner(), true);
+	ProjectileCollision->bReturnMaterialOnMove = true;
 	ProjectileMovement->Velocity = ShotDirection * ProjectileMovement->InitialSpeed;
 	ProjectileCollision->OnComponentHit.AddDynamic(this, &APSProjectileBase::OnHit);
 
@@ -49,8 +50,7 @@ void APSProjectileBase::BeginPlay()
 	SetLifeSpan(LifeTime);
 }
 
-void APSProjectileBase::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor,
-                              UPrimitiveComponent* OtherComp,
+void APSProjectileBase::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp,
                               FVector NormalImpulse, const FHitResult& Hit)
 {
 	ProjectileMovement->StopMovementImmediately();
@@ -72,6 +72,8 @@ void APSProjectileBase::MakeDamage()
 
 AController* APSProjectileBase::GetController() const
 {
+	if(!GetOwner<APawn>()) return nullptr;
+
 	const auto Controller = GetOwner<APawn>()->GetController();
 	return Controller ? Controller : nullptr;
 }

@@ -114,8 +114,12 @@ bool UPSWeaponComponent::CanEquip()
 {
 	const auto Character = GetOwner<APSCharacterBase>();
 
-	return CurrentWeapon && !IsEquiping && !IsReloading && Character && !Character->IsRunning() &&
-		!CurrentWeapon->IsFire();
+	return CurrentWeapon
+		&& !IsEquiping
+		&& !IsReloading
+		&& Character
+		&& !Character->IsRunning()
+		&& !CurrentWeapon->IsFire();
 }
 
 void UPSWeaponComponent::OnStartSetupMagazine()
@@ -150,12 +154,17 @@ void UPSWeaponComponent::StopFire()
 
 bool UPSWeaponComponent::CanFire()
 {
-	return CurrentWeapon && !IsEquiping && !IsReloading;
+	return CurrentWeapon
+		&& !IsEquiping
+		&& !IsReloading;
 }
 
 bool UPSWeaponComponent::CanReload()
 {
-	return CurrentWeapon && !IsEquiping && !IsReloading && CurrentWeapon->CanReload();
+	return CurrentWeapon
+		&& !IsEquiping
+		&& !IsReloading
+		&& CurrentWeapon->CanReload();
 }
 
 void UPSWeaponComponent::OnClipEmpty(APSWeaponBase* EmptyWeapon)

@@ -4,6 +4,7 @@
 #include "PSCharacterBase.h"
 #include "PSWeaponBase.h"
 #include "PSWeaponComponent.h"
+#include "AnimGraphRuntime/Public/KismetAnimationLibrary.h"
 #include "GameFramework/CharacterMovementComponent.h"
 
 void UPSAnimInstance::NativeInitializeAnimation()
@@ -20,9 +21,10 @@ void UPSAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 	if(!Character) return;
 
 	Velocity = Character->GetVelocity().Length();
+	Direction = UKismetAnimationLibrary::CalculateDirection(Character->GetVelocity(), Character->GetActorRotation());
 	IsJumping = GetIsJump();
 	IsRuning = GetIsRuning();
-	GetWeaponAnimData(WeaponAnimData);
+	GetWeaponAnimData(WeaponAnimData);	
 }
 
 bool UPSAnimInstance::GetIsJump() const

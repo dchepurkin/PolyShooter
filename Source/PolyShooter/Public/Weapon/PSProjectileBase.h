@@ -42,6 +42,9 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category=PSProjectile, meta=(ClampMin = "0.0"))
 	float DamageRadius = 400.0f;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category=PSProjectile, meta=(ClampMin = "0.0"))
+	float BoomDelay = 0.0f;
+
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category=PSProjectile)
 	bool DoFullDamage = false;
 
@@ -56,11 +59,11 @@ protected:
 
 private:
 	FVector ShotDirection = FVector::ZeroVector;
-	
+
 	UFUNCTION()
 	void OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp,
-	                    FVector NormalImpulse, const FHitResult& Hit);
+	           FVector NormalImpulse, const FHitResult& Hit);
 
 	void MakeDamage();
-	AController* GetController() const;	
+	AController* GetController() const;
 };

@@ -23,6 +23,9 @@ protected:
 	float Velocity = 0.0f;
 
 	UPROPERTY(BlueprintReadOnly, Category=PSAnimInstance)
+	float Direction = 0.0f;
+
+	UPROPERTY(BlueprintReadOnly, Category=PSAnimInstance)
 	bool IsJumping = false;
 
 	UPROPERTY(BlueprintReadOnly, Category=PSAnimInstance)

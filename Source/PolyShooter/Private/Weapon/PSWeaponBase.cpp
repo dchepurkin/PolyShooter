@@ -86,7 +86,7 @@ bool APSWeaponBase::GetPlayerViewPoint(FVector& ViewLocation, FRotator& ViewRota
 	const auto Pawn = GetOwner<APawn>();
 	if(!Pawn) return false;
 
-	const auto Controller = Pawn->GetController<APlayerController>();
+	const auto Controller = Pawn->GetController();
 	if(!Controller) return false;
 
 	Controller->IsPlayerController()

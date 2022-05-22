@@ -2,6 +2,7 @@
 
 #include "Character/PSCharacterBase.h"
 
+#include "PSWeaponComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "Components/PSHealthComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
@@ -12,6 +13,8 @@ APSCharacterBase::APSCharacterBase(const FObjectInitializer& ObjectInitializer)
 	PrimaryActorTick.bCanEverTick = false;
 
 	HealthComponent = CreateDefaultSubobject<UPSHealthComponent>("HealthComponent");
+	WeaponComponent = CreateDefaultSubobject<UPSWeaponComponent>("WeaponComponent");
+	SpawnCollisionHandlingMethod = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
 }
 
 void APSCharacterBase::BeginPlay()
@@ -40,4 +43,3 @@ void APSCharacterBase::OnDeath()
 	GetCharacterMovement()->DisableMovement();
 	SetLifeSpan(DeathLifeSpan);
 }
-

@@ -5,6 +5,7 @@
 #include "EngineUtils.h"
 #include "PSPlayerCharacter.h"
 #include "PSPlayerController.h"
+#include "PSWeaponComponent.h"
 #include "UI/PSHUDBase.h"
 
 APSLevelGameModeBase::APSLevelGameModeBase()
@@ -36,7 +37,7 @@ void APSLevelGameModeBase::GameOver()
 {
 	for(const auto Pawn : TActorRange<APawn>(GetWorld()))
 	{
-		if(!Pawn) continue;
+		if(!Pawn) continue;		
 		Pawn->TurnOff();
 		Pawn->DisableInput(nullptr);
 	}

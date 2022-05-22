@@ -27,9 +27,7 @@ APSPlayerCharacter::APSPlayerCharacter(const FObjectInitializer& ObjectInitializ
 	FirstPersonMeshComponent->bOnlyOwnerSee = true;
 
 	GetCapsuleComponent()->SetCollisionObjectType(ECollisionChannel::ECC_GameTraceChannel1);
-	GetCapsuleComponent()->SetCollisionResponseToChannel(ECC_Visibility, ECR_Block);
-
-	WeaponComponent = CreateDefaultSubobject<UPSWeaponComponent>("WeaponComponent");
+	GetCapsuleComponent()->SetCollisionResponseToChannel(ECC_Visibility, ECR_Block);	
 }
 
 void APSPlayerCharacter::BeginPlay()
@@ -54,6 +52,7 @@ void APSPlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputC
 	PlayerInputComponent->BindAction("Run", IE_Pressed, this, &APSPlayerCharacter::StartRun);
 	PlayerInputComponent->BindAction("Run", IE_Released, this, &APSPlayerCharacter::StopRun);
 	PlayerInputComponent->BindAction("Fire", IE_Pressed, this, &APSPlayerCharacter::StartFire);
+	PlayerInputComponent->BindAction("Fire", IE_Released, this, &APSPlayerCharacter::StopFire);
 	PlayerInputComponent->BindAction("Fire", IE_Released, this, &APSPlayerCharacter::StopFire);
 	PlayerInputComponent->BindAction("Reload", IE_Pressed, WeaponComponent, &UPSWeaponComponent::ChangeClip);
 
@@ -98,16 +97,17 @@ bool APSPlayerCharacter::IsRunning() const
 
 void APSPlayerCharacter::StartFire()
 {
-	if(IsRunning() || !GetCharacterMovement() || GetCharacterMovement()->IsFalling() || !WeaponComponent) return;
-
-	WeaponComponent->StartFire();
+	if(CanFire()) WeaponComponent->StartFire();
 }
 
 void APSPlayerCharacter::StopFire()
 {
-	if(!WeaponComponent) return;
+	if(WeaponComponent) WeaponComponent->StopFire();
+}
 
-	WeaponComponent->StopFire();
+bool APSPlayerCharacter::CanFire()
+{
+	return !IsRunning() && GetCharacterMovement() && !GetCharacterMovement()->IsFalling() && WeaponComponent;
 }
 
 void APSPlayerCharacter::OnDeath()

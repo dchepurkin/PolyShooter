@@ -19,17 +19,21 @@ class POLYSHOOTER_API APSHUDBase : public AHUD
 public:
 	APSHUDBase();
 	virtual void Tick(float DeltaSeconds) override;
-	
+
 	void ShowLoadingScreen();
+	const TArray<UTexture2D*>& GetLoadingScreenBackgroundImages() { return LoadingScreenBackgrounds; }
+
 	FOnLoadingScreenFinishedSignature OnLoadingScreenFinished;
 
 protected:
-	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category="PSHUD|LoadingScreen")
 	TSubclassOf<UPSWidgetBase> LoadingScreenWidgetClass;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category="PSHUD|LoadingScreen", meta=(ClampMin = "0.0"))
 	float LoadingScreenDelay = 3.0f;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category="PSHUD|LoadingScreen")
+	TArray<UTexture2D*> LoadingScreenBackgrounds;
 
 	void CreateSubWidget(TSubclassOf<UPSWidgetBase> WidgetClass);
 

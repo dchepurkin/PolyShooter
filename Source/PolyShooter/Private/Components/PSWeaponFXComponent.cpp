@@ -38,7 +38,7 @@ void UPSWeaponFXComponent::SpawnDecal(const FHitResult& HitResult, FImpactData& 
 	if(!ImpactMaterial) return;
 
 	const int32 ImpactTextureIndex = FMath::RandRange(0, CurrentImpactData.ImpactTextures.Num() - 1);
-	if(!IsValid(CurrentImpactData.ImpactTextures[ImpactTextureIndex])) return;
+	if(!CurrentImpactData.ImpactTextures.Num()) return;
 
 	ImpactMaterial->SetTextureParameterValue(CurrentImpactData.BaseColorName, CurrentImpactData.ImpactTextures[ImpactTextureIndex]);
 
