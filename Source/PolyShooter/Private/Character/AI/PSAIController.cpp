@@ -4,10 +4,12 @@
 
 #include "AI/PSAIPerceptionComponent.h"
 
+DEFINE_LOG_CATEGORY_STATIC(LogPSAIController, All, All);
+
 APSAIController::APSAIController()
 {
 	PrimaryActorTick.bCanEverTick = true;
-	
+
 	AIPerceptionComponent = CreateDefaultSubobject<UPSAIPerceptionComponent>("AIPerceptionComponent");
 	SetPerceptionComponent(*AIPerceptionComponent);
 }
@@ -30,5 +32,3 @@ void APSAIController::OnPossess(APawn* InPawn)
 
 	RunBehaviorTree(BehaviorTreeAsset);
 }
-
-

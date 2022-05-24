@@ -3,6 +3,7 @@
 #include "Components/PSHealthComponent.h"
 
 #include "GameFramework/Character.h"
+#include "Perception/AISense_Damage.h"
 
 DEFINE_LOG_CATEGORY_STATIC(LogPSHealthComponent, All, All)
 
@@ -28,6 +29,7 @@ void UPSHealthComponent::OnTakeAnyDamage(AActor* DamagedActor, float Damage, con
                                          AController* InstigatedBy, AActor* DamageCauser)
 {
 	ApplyDamage(Damage);
+	ReportDamageEvent(Damage, InstigatedBy);
 }
 
 void UPSHealthComponent::ApplyDamage(float Damage)
@@ -73,6 +75,21 @@ void UPSHealthComponent::AutoHeal()
 {
 	MakeHeal(AutoHealAmount);
 	if(FMath::IsNearlyEqual(Health, MaxHealth)) SetAutoHealTimer(false);
+}
+
+void UPSHealthComponent::ReportDamageEvent(float Damage, AController* InstigatedBy)
+{
+	if(!GetWorld() ||
+		!GetOwner() ||
+		!InstigatedBy ||
+		!InstigatedBy->GetPawn())
+		return;
+	
+	UAISense_Damage::ReportDamageEvent(GetWorld(),
+	                                   GetOwner(),
+	                                   InstigatedBy->GetPawn(), Damage,
+	                                   InstigatedBy->GetPawn()->GetActorLocation(),
+	                                   GetOwner()->GetActorLocation());
 }
 
 void UPSHealthComponent::MakeHeal(const float HealthAmount)

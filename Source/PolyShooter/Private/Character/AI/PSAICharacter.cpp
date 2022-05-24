@@ -18,7 +18,7 @@ APSAICharacter::APSAICharacter(const FObjectInitializer& ObjectInitializer)
 
 	GetMesh()->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
 	GetMesh()->SetCollisionResponseToChannel(ECC_Visibility, ECR_Block);
-	GetMesh()->SetCollisionResponseToChannel(ECC_GameTraceChannel1, ECR_Ignore);
+	GetMesh()->SetCollisionResponseToChannel(ECC_GameTraceChannel1, ECR_Ignore);	
 }
 
 void APSAICharacter::OnDeath()

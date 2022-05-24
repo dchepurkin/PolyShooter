@@ -6,6 +6,8 @@
 #include "BehaviorTree/BTService.h"
 #include "PSBTFireService.generated.h"
 
+class UPSWeaponComponent;
+
 UCLASS()
 class POLYSHOOTER_API UPSBTFireService : public UBTService
 {
@@ -16,8 +18,21 @@ public:
 
 protected:
 	virtual void TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, float DeltaSeconds) override;
+	virtual void OnSearchStart(FBehaviorTreeSearchData& SearchData) override;
 
 	UPROPERTY(EditInstanceOnly, BlueprintReadWrite, Category=PSFireService)
 	FBlackboardKeySelector EnemyActorKey;
-	
+
+	UPROPERTY(EditInstanceOnly, BlueprintReadWrite, Category=PSFireService, meta=(ClampMin = "0.5"))
+	float FireRate = 0.5f;
+
+	UPROPERTY(EditInstanceOnly, BlueprintReadWrite, Category=PSFireService, meta=(ClampMin = "100.0"))
+	float FireDistance = 2000.0f;
+
+private:
+	FTimerHandle FireTimerHandle;
+
+	void StopFire(const UBehaviorTreeComponent& OwnerComp);
+	UPSWeaponComponent* GetWeaponComponent(const UBehaviorTreeComponent& OwnerComp);
+	bool IsDistanceReadyToFire(UBlackboardComponent* Blackboard);
 };

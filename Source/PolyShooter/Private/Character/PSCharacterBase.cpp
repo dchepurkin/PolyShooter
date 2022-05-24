@@ -42,4 +42,6 @@ void APSCharacterBase::OnDeath()
 	GetCapsuleComponent()->SetCollisionResponseToAllChannels(ECR_Ignore);
 	GetCharacterMovement()->DisableMovement();
 	SetLifeSpan(DeathLifeSpan);
+
+	if(WeaponComponent) WeaponComponent->StopFire();
 }

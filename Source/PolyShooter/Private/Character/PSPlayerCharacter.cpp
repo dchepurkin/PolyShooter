@@ -113,6 +113,5 @@ bool APSPlayerCharacter::CanFire()
 void APSPlayerCharacter::OnDeath()
 {
 	Super::OnDeath();
-	StopFire();
 	if(WeaponComponent) WeaponComponent->SpawnAmmoBox();
 }

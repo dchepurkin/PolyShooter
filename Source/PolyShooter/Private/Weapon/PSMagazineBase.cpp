@@ -9,7 +9,6 @@ APSMagazineBase::APSMagazineBase()
 	Mesh = CreateDefaultSubobject<UStaticMeshComponent>("Mesh");
 	Mesh->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	Mesh->SetCastShadow(false);
-	Mesh->bOnlyOwnerSee = true;
 	SetRootComponent(Mesh);
 }
 

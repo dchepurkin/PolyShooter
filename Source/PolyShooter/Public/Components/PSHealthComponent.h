@@ -67,5 +67,7 @@ private:
 	void SetHealth(float NewHealth);
 	void ApplyDamage(float Damage);
 	void SetAutoHealTimer(const bool Enabled);
-	void AutoHeal();	
+	void AutoHeal();
+
+	void ReportDamageEvent(float Damage, AController* InstigatedBy);
 };
