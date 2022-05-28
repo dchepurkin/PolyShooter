@@ -81,6 +81,9 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category=PSWeaponBase)
 	FWeaponUIData WeaponUIData;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category=PSWeaponBase)
+	UParticleSystem* MuzzleVFX = nullptr;
+
 	UPROPERTY()
 	APSMagazineBase* Magazine;
 

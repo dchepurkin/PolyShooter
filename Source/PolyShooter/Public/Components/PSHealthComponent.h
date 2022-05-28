@@ -39,7 +39,7 @@ protected:
 	FVector2D LandedDamage = FVector2D(0.0, MaxHealth);
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category="Health|AutoHeal")
-	bool AutoHealEnabled = true;
+	bool AutoHealEnabled = false;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category="Health|AutoHeal",
 		meta=(ClampMin = "0.001", EditCondition = AutoHealEnabled))

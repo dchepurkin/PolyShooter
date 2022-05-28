@@ -24,7 +24,7 @@ void UPSAIPerceptionComponent::OnRegister()
 
 void UPSAIPerceptionComponent::OnPerseption(const FActorPerceptionUpdateInfo& UpdateInfo)
 {
-	UE_LOG(LogPSAIPerception, Display, TEXT("TEST"));
+	
 }
 
 AActor* UPSAIPerceptionComponent::GetPerceivedActor(const TSubclassOf<UAISense> Sence)

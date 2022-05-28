@@ -73,7 +73,10 @@ struct FWeaponData
 USTRUCT(BlueprintType)
 struct FImpactData
 {
-	GENERATED_BODY()
+	GENERATED_BODY()	
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category=Weapon)
+	UParticleSystem* ImpactVFX = nullptr;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category=Weapon)
 	USoundCue* ImpactSoundCue = nullptr;

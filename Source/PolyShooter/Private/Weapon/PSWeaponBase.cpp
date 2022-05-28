@@ -119,6 +119,9 @@ void APSWeaponBase::MakeShot()
 	PSUtils::PlayMontage(GetOwner(), WeaponAnimData.FireAnimMontage);
 	PSUtils::PlayCameraShake(GetOwner<APawn>(), WeaponData.FireCameraShake);
 	UGameplayStatics::SpawnSoundAttached(WeaponSoundData.FireSoundCue, WeaponMesh);
+	UGameplayStatics::SpawnEmitterAttached(MuzzleVFX, WeaponMesh, WeaponData.MuzzleSocketName,
+	                                       FVector::ZeroVector,
+	                                       FRotator::ZeroRotator);
 }
 
 void APSWeaponBase::DecreaseAmmo()

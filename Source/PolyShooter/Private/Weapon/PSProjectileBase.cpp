@@ -4,7 +4,6 @@
 #include "Components/SphereComponent.h"
 #include "GameFramework/ProjectileMovementComponent.h"
 #include "Kismet/GameplayStatics.h"
-#include "DrawDebugHelpers.h"
 #include "PSWeaponFXComponent.h"
 #include "Sound/SoundCue.h"
 
@@ -66,8 +65,6 @@ void APSProjectileBase::MakeDamage()
 	UGameplayStatics::ApplyRadialDamage(GetWorld(), Damage, GetActorLocation(), DamageRadius, nullptr,
 	                                    {IgnoreDamageSelf ? GetOwner() : nullptr},
 	                                    this, GetController(), DoFullDamage);
-
-	DrawDebugSphere(GetWorld(), GetActorLocation(), DamageRadius, 24, FColor::Red, false, 5.0f, 0, 1.0f);
 }
 
 AController* APSProjectileBase::GetController() const

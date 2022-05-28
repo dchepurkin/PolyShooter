@@ -10,7 +10,7 @@ APSAICharacter::APSAICharacter(const FObjectInitializer& ObjectInitializer)
 	: Super(ObjectInitializer)
 {
 	PrimaryActorTick.bCanEverTick = false;
-	
+
 	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
 	GetCapsuleComponent()->SetCollisionResponseToAllChannels(ECR_Ignore);
 	GetCapsuleComponent()->SetCollisionResponseToChannel(ECC_WorldStatic, ECR_Block);
@@ -18,7 +18,7 @@ APSAICharacter::APSAICharacter(const FObjectInitializer& ObjectInitializer)
 
 	GetMesh()->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
 	GetMesh()->SetCollisionResponseToChannel(ECC_Visibility, ECR_Block);
-	GetMesh()->SetCollisionResponseToChannel(ECC_GameTraceChannel1, ECR_Ignore);	
+	GetMesh()->SetCollisionResponseToChannel(ECC_GameTraceChannel1, ECR_Ignore);
 }
 
 void APSAICharacter::OnDeath()
@@ -29,5 +29,6 @@ void APSAICharacter::OnDeath()
 	if(AIController && AIController->BrainComponent)
 	{
 		AIController->BrainComponent->Cleanup();
+		AIController->Destroy();
 	}
 }

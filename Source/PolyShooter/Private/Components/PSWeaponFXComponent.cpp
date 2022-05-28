@@ -27,7 +27,8 @@ void UPSWeaponFXComponent::PlayImpactFX(const FHitResult& HitResult)
 		CurrentImpactData = ImpactData[HitResult.PhysMaterial.Get()];
 	}
 
-	UGameplayStatics::PlaySoundAtLocation(GetWorld(), CurrentImpactData.ImpactSoundCue, HitResult.ImpactPoint);
+	UGameplayStatics::PlaySoundAtLocation(GetWorld(), CurrentImpactData.ImpactSoundCue, HitResult.ImpactPoint, HitResult.ImpactNormal.Rotation());
+	UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), CurrentImpactData.ImpactVFX, HitResult.ImpactPoint, HitResult.ImpactNormal.Rotation());
 
 	SpawnDecal(HitResult, CurrentImpactData);
 }

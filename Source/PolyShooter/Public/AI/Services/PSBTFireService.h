@@ -23,16 +23,16 @@ protected:
 	UPROPERTY(EditInstanceOnly, BlueprintReadWrite, Category=PSFireService)
 	FBlackboardKeySelector EnemyActorKey;
 
-	UPROPERTY(EditInstanceOnly, BlueprintReadWrite, Category=PSFireService, meta=(ClampMin = "0.5"))
-	float FireRate = 0.5f;
+	UPROPERTY(EditInstanceOnly, BlueprintReadWrite, Category=PSFireService, meta=(ClampMin = "0.1"))
+	float FireTime = 0.7f;
 
 	UPROPERTY(EditInstanceOnly, BlueprintReadWrite, Category=PSFireService, meta=(ClampMin = "100.0"))
 	float FireDistance = 2000.0f;
 
 private:
-	FTimerHandle FireTimerHandle;
-
-	void StopFire(const UBehaviorTreeComponent& OwnerComp);
-	UPSWeaponComponent* GetWeaponComponent(const UBehaviorTreeComponent& OwnerComp);
+	FTimerHandle StopFireTimerHandle;
+	
+	void StopFire(UBehaviorTreeComponent* OwnerComp);
+	UPSWeaponComponent* GetWeaponComponent(UBehaviorTreeComponent* OwnerComp);
 	bool IsDistanceReadyToFire(UBlackboardComponent* Blackboard);
 };
