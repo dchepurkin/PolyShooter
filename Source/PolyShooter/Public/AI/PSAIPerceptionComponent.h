@@ -13,11 +13,7 @@ class POLYSHOOTER_API UPSAIPerceptionComponent : public UAIPerceptionComponent
 
 public:
 	AActor* GetEnemy();
-	virtual void OnRegister() override;
 
 private:
 	AActor* GetPerceivedActor(const TSubclassOf<UAISense> Sence);
-
-	UFUNCTION()
-	void OnPerseption(const FActorPerceptionUpdateInfo& UpdateInfo);
 };

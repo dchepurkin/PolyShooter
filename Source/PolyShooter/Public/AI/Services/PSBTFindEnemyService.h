@@ -19,5 +19,7 @@ protected:
 
 	UPROPERTY(EditInstanceOnly, BlueprintReadWrite, Category=PSFindEnemy)
 	FBlackboardKeySelector EnemyActorKey;
-	
+
+private:
+	void MakeNoise(AActor* NoiseInstigator);
 };

@@ -13,13 +13,23 @@ UPSBTFindEnemyService::UPSBTFindEnemyService()
 
 void UPSBTFindEnemyService::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, float DeltaSeconds)
 {
-	if(const auto Blackboard = OwnerComp.GetBlackboardComponent())
-	{
-		const auto AIController = OwnerComp.GetAIOwner();
-		const auto AIPerceptionComponent = AIController->FindComponentByClass<UPSAIPerceptionComponent>();
-
-		Blackboard->SetValueAsObject(EnemyActorKey.SelectedKeyName, AIPerceptionComponent->GetEnemy());
-	}
-
 	Super::TickNode(OwnerComp, NodeMemory, DeltaSeconds);
+
+	const auto Blackboard = OwnerComp.GetBlackboardComponent();
+	if(!Blackboard) return;
+
+	const auto AIController = OwnerComp.GetAIOwner();
+	if(!AIController) return;
+
+	const auto AIPerceptionComponent = AIController->FindComponentByClass<UPSAIPerceptionComponent>();
+	if(!AIPerceptionComponent) return;
+
+	Blackboard->SetValueAsObject(EnemyActorKey.SelectedKeyName, AIPerceptionComponent->GetEnemy());
+	MakeNoise(AIPerceptionComponent->GetEnemy());
+}
+
+void UPSBTFindEnemyService::MakeNoise(AActor* NoiseInstigator)
+{
+	if(const auto Pawn = Cast<APawn>(NoiseInstigator))
+		Pawn->MakeNoise(1.f, Pawn, Pawn->GetActorLocation());
 }

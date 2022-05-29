@@ -5,26 +5,17 @@
 #include "PSHealthComponent.h"
 #include "PSPlayerCharacter.h"
 #include "Perception/AISense_Damage.h"
+#include "Perception/AISense_Hearing.h"
 #include "Perception/AISense_Sight.h"
 
 DEFINE_LOG_CATEGORY_STATIC(LogPSAIPerception, All, All);
 
 AActor* UPSAIPerceptionComponent::GetEnemy()
 {
-	const auto EnemyActor = GetPerceivedActor(UAISense_Sight::StaticClass());
-	return EnemyActor ? EnemyActor : GetPerceivedActor(UAISense_Damage::StaticClass());
-}
+	auto EnemyActor = GetPerceivedActor(UAISense_Sight::StaticClass());
+	if(!EnemyActor) EnemyActor = GetPerceivedActor(UAISense_Damage::StaticClass());
 
-void UPSAIPerceptionComponent::OnRegister()
-{
-	Super::OnRegister();
-
-	OnTargetPerceptionInfoUpdated.AddDynamic(this, &UPSAIPerceptionComponent::OnPerseption);
-}
-
-void UPSAIPerceptionComponent::OnPerseption(const FActorPerceptionUpdateInfo& UpdateInfo)
-{
-	
+	return EnemyActor ? EnemyActor : GetPerceivedActor(UAISense_Hearing::StaticClass());
 }
 
 AActor* UPSAIPerceptionComponent::GetPerceivedActor(const TSubclassOf<UAISense> Sence)
@@ -39,6 +30,7 @@ AActor* UPSAIPerceptionComponent::GetPerceivedActor(const TSubclassOf<UAISense> 
 		if(PerceivedActor->IsA(APSPlayerCharacter::StaticClass()) &&
 			PerceivedActor->FindComponentByClass<UPSHealthComponent>() &&
 			!PerceivedActor->FindComponentByClass<UPSHealthComponent>()->IsDead())
+
 			return PerceivedActor;
 	}
 

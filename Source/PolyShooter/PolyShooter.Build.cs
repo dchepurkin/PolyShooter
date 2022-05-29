@@ -37,6 +37,7 @@ public class PolyShooter : ModuleRules
 			"PolyShooter/Public/AI",
 			"PolyShooter/Public/AI/Services",
 			"PolyShooter/Public/AI/EQSContexts",
+			"PolyShooter/Public/AI/Tasks",
 		});
 
 		// Uncomment if you are using Slate UI

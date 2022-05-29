@@ -25,6 +25,7 @@ public:
 
 	bool IsDead() const { return FMath::IsNearlyZero(Health); }
 	void MakeHeal(const float HealthAmount);
+	void MakeHeal();
 
 protected:
 	virtual void BeginPlay() override;
@@ -68,6 +69,4 @@ private:
 	void ApplyDamage(float Damage);
 	void SetAutoHealTimer(const bool Enabled);
 	void AutoHeal();
-
-	void ReportDamageEvent(float Damage, AController* InstigatedBy);
 };

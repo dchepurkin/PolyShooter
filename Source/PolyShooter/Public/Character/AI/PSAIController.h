@@ -28,4 +28,9 @@ protected:
 
 private:
 	AActor* GetEnemyToFocus();
+	void ReportNoiseEvent(APawn* NoiseMaker);
+	void ReportDamageEvent(float Damage, AController* InstigatedBy);
+
+	UFUNCTION()
+	void OnTakeDamage(AActor* DamagedActor, float Damage, const class UDamageType* DamageType, class AController* InstigatedBy, AActor* DamageCauser);
 };

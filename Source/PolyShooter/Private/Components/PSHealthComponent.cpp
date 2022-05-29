@@ -29,7 +29,6 @@ void UPSHealthComponent::OnTakeAnyDamage(AActor* DamagedActor, float Damage, con
                                          AController* InstigatedBy, AActor* DamageCauser)
 {
 	ApplyDamage(Damage);
-	ReportDamageEvent(Damage, InstigatedBy);
 }
 
 void UPSHealthComponent::ApplyDamage(float Damage)
@@ -77,23 +76,13 @@ void UPSHealthComponent::AutoHeal()
 	if(FMath::IsNearlyEqual(Health, MaxHealth)) SetAutoHealTimer(false);
 }
 
-void UPSHealthComponent::ReportDamageEvent(float Damage, AController* InstigatedBy)
-{
-	if(!GetWorld() ||
-		!GetOwner() ||
-		!InstigatedBy ||
-		!InstigatedBy->GetPawn())
-		return;
-	
-	UAISense_Damage::ReportDamageEvent(GetWorld(),
-	                                   GetOwner(),
-	                                   InstigatedBy->GetPawn(), Damage,
-	                                   InstigatedBy->GetPawn()->GetActorLocation(),
-	                                   GetOwner()->GetActorLocation());
-}
-
 void UPSHealthComponent::MakeHeal(const float HealthAmount)
 {
 	if(FMath::IsNearlyZero(HealthAmount)) return;
 	SetHealth(Health + HealthAmount);
+}
+
+void UPSHealthComponent::MakeHeal()
+{
+	SetHealth(MaxHealth);
 }
