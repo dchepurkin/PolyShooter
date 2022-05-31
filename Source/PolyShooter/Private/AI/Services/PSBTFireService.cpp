@@ -20,7 +20,7 @@ UPSBTFireService::UPSBTFireService()
 void UPSBTFireService::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, float DeltaSeconds)
 {
 	const auto Blackboard = OwnerComp.GetBlackboardComponent();
-	const auto HasAim = Blackboard && IsDistanceReadyToFire(Blackboard);
+	const auto HasAim = Blackboard && IsDistanceReadyToFire(Blackboard) && IsPlayerVisible(&OwnerComp);
 
 	if(GetWeaponComponent(&OwnerComp))
 	{
@@ -66,4 +66,30 @@ bool UPSBTFireService::IsDistanceReadyToFire(UBlackboardComponent* Blackboard)
 	const auto Pawn = Controller->GetPawn();
 
 	return Pawn && Pawn->GetDistanceTo(EnemyActor) <= FireDistance;
+}
+
+bool UPSBTFireService::IsPlayerVisible(UBehaviorTreeComponent* OwnerComp)
+{
+	if(!GetWorld() || !OwnerComp) return false;
+
+	const auto Controller = OwnerComp->GetAIOwner();
+	if(!Controller) return false;
+
+	const auto ControlledPawn = Controller->GetPawn();
+	if(!ControlledPawn) return false;
+
+	const auto Blackboard = OwnerComp->GetBlackboardComponent();
+	if(!Blackboard) return false;
+
+	const auto EnemyActor = Cast<AActor>(Blackboard->GetValueAsObject(EnemyActorKey.SelectedKeyName));
+	if(!EnemyActor) return false;
+
+	FHitResult HitResult;
+	FCollisionQueryParams CollisionQueryParams;
+	CollisionQueryParams.AddIgnoredActor(ControlledPawn);
+
+	GetWorld()->LineTraceSingleByChannel(HitResult, ControlledPawn->GetActorLocation(), EnemyActor->GetActorLocation(), ECC_GameTraceChannel1,
+	                                     CollisionQueryParams);
+
+	return !HitResult.bBlockingHit;
 }

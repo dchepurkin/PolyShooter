@@ -25,11 +25,4 @@ void UPSBTFindEnemyService::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* N
 	if(!AIPerceptionComponent) return;
 
 	Blackboard->SetValueAsObject(EnemyActorKey.SelectedKeyName, AIPerceptionComponent->GetEnemy());
-	MakeNoise(AIPerceptionComponent->GetEnemy());
-}
-
-void UPSBTFindEnemyService::MakeNoise(AActor* NoiseInstigator)
-{
-	if(const auto Pawn = Cast<APawn>(NoiseInstigator))
-		Pawn->MakeNoise(1.f, Pawn, Pawn->GetActorLocation());
 }

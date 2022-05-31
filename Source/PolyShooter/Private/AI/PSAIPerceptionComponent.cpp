@@ -2,10 +2,10 @@
 
 #include "AI/PSAIPerceptionComponent.h"
 
+#include "PSAISense_Hearing.h"
 #include "PSHealthComponent.h"
 #include "PSPlayerCharacter.h"
 #include "Perception/AISense_Damage.h"
-#include "Perception/AISense_Hearing.h"
 #include "Perception/AISense_Sight.h"
 
 DEFINE_LOG_CATEGORY_STATIC(LogPSAIPerception, All, All);
@@ -15,7 +15,7 @@ AActor* UPSAIPerceptionComponent::GetEnemy()
 	auto EnemyActor = GetPerceivedActor(UAISense_Sight::StaticClass());
 	if(!EnemyActor) EnemyActor = GetPerceivedActor(UAISense_Damage::StaticClass());
 
-	return EnemyActor ? EnemyActor : GetPerceivedActor(UAISense_Hearing::StaticClass());
+	return EnemyActor ? EnemyActor : GetPerceivedActor(UPSAISense_Hearing::StaticClass());
 }
 
 AActor* UPSAIPerceptionComponent::GetPerceivedActor(const TSubclassOf<UAISense> Sence)

@@ -28,7 +28,6 @@ protected:
 
 private:
 	AActor* GetEnemyToFocus();
-	void ReportNoiseEvent(APawn* NoiseMaker);
 	void ReportDamageEvent(float Damage, AController* InstigatedBy);
 
 	UFUNCTION()

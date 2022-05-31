@@ -4,6 +4,7 @@
 
 #include "AI/PSAIPerceptionComponent.h"
 #include "Perception/AISense_Damage.h"
+#include "Sense/PSAISense_Hearing.h"
 
 DEFINE_LOG_CATEGORY_STATIC(LogPSAIController, All, All);
 
@@ -18,7 +19,6 @@ APSAIController::APSAIController()
 void APSAIController::OnTakeDamage(AActor* DamagedActor, float Damage, const class UDamageType* DamageType, class AController* InstigatedBy,
                                    AActor* DamageCauser)
 {
-	//ReportNoiseEvent(Cast<APawn>(DamageCauser));
 	ReportDamageEvent(Damage, InstigatedBy);
 }
 
@@ -32,12 +32,6 @@ void APSAIController::Tick(float DeltaSeconds)
 AActor* APSAIController::GetEnemyToFocus()
 {
 	return AIPerceptionComponent->GetEnemy();
-}
-
-void APSAIController::ReportNoiseEvent(APawn* NoiseMaker)
-{
-	if(!GetWorld() || !NoiseMaker) return;
-	MakeNoise(1.f, NoiseMaker, NoiseMaker->GetActorLocation());
 }
 
 void APSAIController::ReportDamageEvent(float Damage, AController* InstigatedBy)

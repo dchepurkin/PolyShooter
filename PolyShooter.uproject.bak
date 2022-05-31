@@ -10,8 +10,14 @@
 			"LoadingPhase": "Default",
 			"AdditionalDependencies": [
 				"Engine",
-				"UMG"
+				"UMG",
+				"AIModule"
 			]
+		},
+		{
+			"Name": "GameplayDebugger",
+			"Type": "Editor",
+			"LoadingPhase": "Default"
 		}
 	],
 	"Plugins": [
@@ -32,9 +38,8 @@
 			]
 		},
 		{
-			"Name": "AsyncLoadingScreen",
-			"Enabled": false,
-			"MarketplaceURL": "com.epicgames.launcher://ue/marketplace/product/01f39767dc6b4290877f38365787cbf8"
+			"Name": "CascadeToNiagaraConverter",
+			"Enabled": true
 		}
 	]
 }

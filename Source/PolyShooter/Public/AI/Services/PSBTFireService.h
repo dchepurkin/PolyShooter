@@ -35,4 +35,5 @@ private:
 	void StopFire(UBehaviorTreeComponent* OwnerComp);
 	UPSWeaponComponent* GetWeaponComponent(UBehaviorTreeComponent* OwnerComp);
 	bool IsDistanceReadyToFire(UBlackboardComponent* Blackboard);
+	bool IsPlayerVisible(UBehaviorTreeComponent* OwnerComp);
 };

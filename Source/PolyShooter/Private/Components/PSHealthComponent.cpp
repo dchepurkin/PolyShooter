@@ -2,6 +2,7 @@
 
 #include "Components/PSHealthComponent.h"
 
+#include "PSUtils.h"
 #include "GameFramework/Character.h"
 #include "Perception/AISense_Damage.h"
 
@@ -29,6 +30,7 @@ void UPSHealthComponent::OnTakeAnyDamage(AActor* DamagedActor, float Damage, con
                                          AController* InstigatedBy, AActor* DamageCauser)
 {
 	ApplyDamage(Damage);
+	PlayDamageCameraShake();
 }
 
 void UPSHealthComponent::ApplyDamage(float Damage)
@@ -74,6 +76,11 @@ void UPSHealthComponent::AutoHeal()
 {
 	MakeHeal(AutoHealAmount);
 	if(FMath::IsNearlyEqual(Health, MaxHealth)) SetAutoHealTimer(false);
+}
+
+void UPSHealthComponent::PlayDamageCameraShake() const
+{
+	PSUtils::PlayCameraShake(GetOwner<APawn>(), DamageCameraShake);
 }
 
 void UPSHealthComponent::MakeHeal(const float HealthAmount)

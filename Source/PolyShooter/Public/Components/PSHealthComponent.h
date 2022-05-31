@@ -39,6 +39,9 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category=Health)
 	FVector2D LandedDamage = FVector2D(0.0, MaxHealth);
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category=Health)
+	TSubclassOf<UCameraShakeBase> DamageCameraShake;
+
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category="Health|AutoHeal")
 	bool AutoHealEnabled = false;
 
@@ -69,4 +72,5 @@ private:
 	void ApplyDamage(float Damage);
 	void SetAutoHealTimer(const bool Enabled);
 	void AutoHeal();
+	void PlayDamageCameraShake() const;
 };

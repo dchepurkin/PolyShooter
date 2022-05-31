@@ -7,10 +7,13 @@ public class PolyShooter : ModuleRules
 	public PolyShooter(ReadOnlyTargetRules target) : base(target)
 	{
 		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
+		PrecompileForTargets = PrecompileTargetsType.Any;
 
-		PublicDependencyModuleNames.AddRange(new string[] { "Core", 
-			"CoreUObject", 
-			"Engine", 
+		PublicDependencyModuleNames.AddRange(new string[]
+		{
+			"Core",
+			"CoreUObject",
+			"Engine",
 			"InputCore",
 			"UMG",
 			"PhysicsCore",
@@ -19,6 +22,11 @@ public class PolyShooter : ModuleRules
 			"GameplayTasks",
 			"NavigationSystem"
 		});
+
+		if (target.Type == TargetRules.TargetType.Editor)
+		{
+			PrivateDependencyModuleNames.AddRange(new string[] { "GameplayDebugger" });
+		}
 
 		PrivateDependencyModuleNames.AddRange(new string[] { "Slate", "SlateCore"});
 
@@ -38,6 +46,7 @@ public class PolyShooter : ModuleRules
 			"PolyShooter/Public/AI/Services",
 			"PolyShooter/Public/AI/EQSContexts",
 			"PolyShooter/Public/AI/Tasks",
+			"PolyShooter/Public/AI/Sense",
 		});
 
 		// Uncomment if you are using Slate UI
