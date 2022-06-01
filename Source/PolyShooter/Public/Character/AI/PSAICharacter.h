@@ -7,6 +7,7 @@
 #include "PSAICharacter.generated.h"
 
 class UWidgetComponent;
+class UPSBOTMovementComponent;
 
 UCLASS()
 class POLYSHOOTER_API APSAICharacter : public APSCharacterBase
@@ -21,8 +22,10 @@ protected:
 	virtual void OnDeath() override;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category=Components)
-	UWidgetComponent* HealthBar;
+	UPSBOTMovementComponent* MovementComponent;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category=Components)
+	UWidgetComponent* HealthBar;
 private:
 	void InitHealhBar();
 };

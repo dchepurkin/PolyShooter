@@ -5,13 +5,14 @@
 #include "AIController.h"
 #include "BrainComponent.h"
 #include "PSBOTHealthBarWidget.h"
+#include "PSBOTMovementComponent.h"
 #include "PSHealthComponent.h"
 #include "PSWeaponComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "Components/WidgetComponent.h"
 
 APSAICharacter::APSAICharacter(const FObjectInitializer& ObjectInitializer)
-	: Super(ObjectInitializer)
+	: Super(ObjectInitializer.SetDefaultSubobjectClass<UPSBOTMovementComponent>(CharacterMovementComponentName))
 {
 	PrimaryActorTick.bCanEverTick = false;
 
