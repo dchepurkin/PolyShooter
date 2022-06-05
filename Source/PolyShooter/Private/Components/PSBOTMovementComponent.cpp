@@ -12,3 +12,11 @@ void UPSBOTMovementComponent::BeginPlay()
 
 	if(RouteInstance) CurrentRoutePoint = FMath::RandRange(0, RouteInstance->GetPointsNum());
 }
+
+FVector UPSBOTMovementComponent::GetNextPointLocation()
+{
+	if(!RouteInstance) return GetOwner()->GetActorLocation();
+	
+	CurrentRoutePoint = (CurrentRoutePoint + 1) % RouteInstance->GetPointsNum();
+	return RouteInstance->GetPointLocation(CurrentRoutePoint);
+}

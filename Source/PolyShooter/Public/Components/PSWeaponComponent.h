@@ -30,6 +30,9 @@ public:
 	void GetAnimData(FWeaponAnimData& AnimData) const;
 	void GetUIData(FWeaponUIData& WeaponUIData) const;
 
+	TMap<TSubclassOf<APSWeaponBase>, FAmmoData> GetWeaponInfo() const;
+	void LoadWeaponInfo(TMap<TSubclassOf<APSWeaponBase>, FAmmoData>& WeaponsInfo);
+
 	void StartFire();
 	void StopFire();
 	void ChangeClip();

@@ -3,9 +3,11 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "PSCoreTypes.h"
 #include "Character/PSCharacterBase.h"
 #include "PSPlayerCharacter.generated.h"
 
+class APSWeaponBase;
 class UCameraComponent;
 
 UCLASS()
@@ -19,6 +21,9 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 	virtual USkeletalMeshComponent* GetMainMesh() const override { return FirstPersonMeshComponent; }
 
+	TMap<TSubclassOf<APSWeaponBase>, FAmmoData> GetWeaponInfo() const;
+	void LoadWeaponInfo(TMap<TSubclassOf<APSWeaponBase>, FAmmoData>& WeaponsInfo);
+
 	virtual bool IsRunning() const override;
 
 protected:
@@ -29,7 +34,7 @@ protected:
 	USkeletalMeshComponent* FirstPersonMeshComponent;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category=Components)
-	UStaticMeshComponent* MagazineMesh;	
+	UStaticMeshComponent* MagazineMesh;
 
 	virtual void BeginPlay() override;
 	virtual void OnDeath() override;

@@ -20,6 +20,7 @@ class POLYSHOOTER_API APSWeaponBase : public AActor
 
 public:
 	APSWeaponBase();
+	virtual ~APSWeaponBase() override;
 
 	FOnClipEmptySignature OnClipEmpty;
 	

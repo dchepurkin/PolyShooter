@@ -32,6 +32,9 @@ public:
 	int32 GetPlayerLifes() const;
 
 	UFUNCTION(BlueprintCallable)
+	int32 GetBotsNum() const;
+
+	UFUNCTION(BlueprintCallable)
 	float GetPlayerHealthPercent() const;
 
 	UFUNCTION(BlueprintCallable)
@@ -55,6 +58,9 @@ protected:
 	UPROPERTY(Transient, meta=(BindWidgetAnim))
 	UWidgetAnimation* DamageAnimation;
 
+	UPROPERTY(Transient, meta=(BindWidgetAnim))
+	UWidgetAnimation* LevelCleanAnimation;
+
 private:
 	UFUNCTION()
 	void OnTakeAnyDamage(AActor* DamagedActor, float Damage, const UDamageType* DamageType, AController* InstigatedBy, AActor* DamageCauser);
@@ -63,4 +69,5 @@ private:
 	void OnHealthChanged(const float HealthPercent);
 	void UpdateHealthBar();
 	void PlayWindgetAnimation(UWidgetAnimation* Animation);
+	void OnLevelClean();
 };

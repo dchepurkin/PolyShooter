@@ -4,6 +4,7 @@
 
 #include "PSGameInstance.h"
 #include "PSHealthComponent.h"
+#include "PSLevelGameModeBase.h"
 #include "PSRespawnComponent.h"
 #include "PSWeaponBase.h"
 #include "PSWeaponComponent.h"
@@ -20,6 +21,9 @@ void UPSPlayerHUDWidgetBase::NativeOnInitialized()
 		GetOwningPlayer()->GetOnNewPawnNotifier().AddUObject(this, &UPSPlayerHUDWidgetBase::OnPawnChanged);
 		OnPawnChanged(GetOwningPlayerPawn());
 	}
+
+	if(GetWorld() && GetWorld()->GetAuthGameMode<APSLevelGameModeBase>())
+		GetWorld()->GetAuthGameMode<APSLevelGameModeBase>()->OnLevenClean.AddUObject(this, &ThisClass::OnLevelClean);
 }
 
 void UPSPlayerHUDWidgetBase::OnPawnChanged(APawn* NewPawn)
@@ -68,6 +72,11 @@ void UPSPlayerHUDWidgetBase::PlayWindgetAnimation(UWidgetAnimation* Animation)
 	if(!IsSpectating() && !IsAnimationPlaying(Animation)) PlayAnimation(Animation);
 }
 
+void UPSPlayerHUDWidgetBase::OnLevelClean()
+{
+	PlayWindgetAnimation(LevelCleanAnimation);
+}
+
 void UPSPlayerHUDWidgetBase::GetAmmoData(FAmmoData& AmmoData) const
 {
 	if(!GetOwningPlayerPawn()) return;
@@ -98,6 +107,12 @@ int32 UPSPlayerHUDWidgetBase::GetPlayerLifes() const
 	if(!GetOwningPlayer() || !GetOwningPlayer()->GetGameInstance<UPSGameInstance>()) return 0;
 
 	return GetOwningPlayer()->GetGameInstance<UPSGameInstance>()->GetLifes();
+}
+
+int32 UPSPlayerHUDWidgetBase::GetBotsNum() const
+{
+	if(!GetWorld() || !GetWorld()->GetAuthGameMode()) return 0;
+	return GetWorld()->GetAuthGameMode<APSLevelGameModeBase>()->GetBotsNum();
 }
 
 float UPSPlayerHUDWidgetBase::GetPlayerHealthPercent() const

@@ -25,6 +25,11 @@ APSWeaponBase::APSWeaponBase()
 	MagazineMesh->SetupAttachment(WeaponMesh);
 }
 
+APSWeaponBase::~APSWeaponBase()
+{
+	if(Magazine) Magazine->Destroy();
+}
+
 void APSWeaponBase::BeginPlay()
 {
 	Super::BeginPlay();

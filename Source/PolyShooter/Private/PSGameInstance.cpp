@@ -2,6 +2,7 @@
 
 #include "PSGameInstance.h"
 
+#include "PSPlayerCharacter.h"
 #include "PSUtils.h"
 #include "PSWeaponBase.h"
 #include "Kismet/GameplayStatics.h"
@@ -12,7 +13,7 @@ void UPSGameInstance::Init()
 {
 	Super::Init();
 
-	//FCoreUObjectDelegates::PreLoadMap.AddUObject(this, &UPSGameInstance::BeginLoadingScreen);
+	FCoreUObjectDelegates::PreLoadMap.AddUObject(this, &UPSGameInstance::PreOpenLevel);
 	FCoreUObjectDelegates::PostLoadMapWithWorld.AddUObject(this, &UPSGameInstance::OnOpenLevel);
 }
 
@@ -31,24 +32,39 @@ void UPSGameInstance::SetPlayerLifes(const int32 NewLifeAmount)
 	CurrentLifes = FMath::Clamp(NewLifeAmount, 0, PlayerData.MaxLifes);
 }
 
-/*inline void UPSGameInstance::BeginLoadingScreen(const FString& MapName)
+void UPSGameInstance::PreOpenLevel(const FString& MapName)
 {
-	/*FLoadingScreenAttributes LoadingScreen;
-	LoadingScreen.MinimumLoadingScreenDisplayTime = LoadingScreenData.LoadingScreenDelay;
-	LoadingScreen.WidgetLoadingScreen = SNew(SPSLoadingScreen, LoadingScreenData.LoadingScreenBackgroundImage);
-	LoadingScreen.bAutoCompleteWhenLoadingCompletes = false;
-
-	GetMoviePlayer()->SetupLoadingScreen(LoadingScreen);#1#
-}*/
+	SaveWeaponInfo();
+}
 
 void UPSGameInstance::OnOpenLevel(UWorld* World)
 {
 	const auto Controller = PSUtils::GetPlayerController(World);
-	if(!Controller)	return;
+	if(!Controller) return;
 
 	Controller->PlayerCameraManager->StartCameraFade(1.0f, 0.0f, StartLevelCameraFadeOutDuration, FLinearColor::Black);
+
+	LoadWeaponInfo();
 }
 
-void UPSGameInstance::SaveAmmoData(const TMap<TSubclassOf<APSWeaponBase>, FAmmoData>& PlayerAmmoData) {}
+void UPSGameInstance::SaveWeaponInfo()
+{
+	const auto Controller = PSUtils::GetPlayerController(GetWorld());
+	if(!Controller) return;
 
+	const auto PlayerCharacter = Controller->GetPawn<APSPlayerCharacter>();
+	if(!PlayerCharacter) return;
 
+	Weapons = PlayerCharacter->GetWeaponInfo();
+}
+
+void UPSGameInstance::LoadWeaponInfo()
+{
+	const auto Controller = PSUtils::GetPlayerController(GetWorld());
+	if(!Controller) return;
+
+	const auto PlayerCharacter = Controller->GetPawn<APSPlayerCharacter>();
+	if(!PlayerCharacter) return;
+
+	PlayerCharacter->LoadWeaponInfo(Weapons);
+}

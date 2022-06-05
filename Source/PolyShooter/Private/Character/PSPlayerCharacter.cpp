@@ -27,7 +27,7 @@ APSPlayerCharacter::APSPlayerCharacter(const FObjectInitializer& ObjectInitializ
 	FirstPersonMeshComponent->bOnlyOwnerSee = true;
 
 	GetCapsuleComponent()->SetCollisionObjectType(ECollisionChannel::ECC_GameTraceChannel1);
-	GetCapsuleComponent()->SetCollisionResponseToChannel(ECC_Visibility, ECR_Block);	
+	GetCapsuleComponent()->SetCollisionResponseToChannel(ECC_Visibility, ECR_Block);
 }
 
 void APSPlayerCharacter::BeginPlay()
@@ -88,6 +88,19 @@ void APSPlayerCharacter::StartRun()
 void APSPlayerCharacter::StopRun()
 {
 	WantsToRun = false;
+}
+
+TMap<TSubclassOf<APSWeaponBase>, FAmmoData> APSPlayerCharacter::GetWeaponInfo() const
+{
+	TMap<TSubclassOf<APSWeaponBase>, FAmmoData> WeaponsInfo;
+	if(WeaponComponent) WeaponsInfo = WeaponComponent->GetWeaponInfo();
+	
+	return WeaponsInfo;
+}
+
+void APSPlayerCharacter::LoadWeaponInfo(TMap<TSubclassOf<APSWeaponBase>, FAmmoData>& WeaponsInfo)
+{
+	if(WeaponComponent) WeaponComponent->LoadWeaponInfo(WeaponsInfo);
 }
 
 bool APSPlayerCharacter::IsRunning() const

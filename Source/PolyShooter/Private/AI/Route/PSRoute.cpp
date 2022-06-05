@@ -9,9 +9,8 @@ APSRoute::APSRoute()
 	PrimaryActorTick.bCanEverTick = false;
 
 	SplineComponent = CreateDefaultSubobject<USplineComponent>("SplineComponent");
-	SplineComponent->SetupAttachment(GetRootComponent());
 	SplineComponent->SetSplinePointType(0, ESplinePointType::Linear);
-	SplineComponent->SetClosedLoop(true);	
+	SplineComponent->SetClosedLoop(true);
 }
 
 FVector APSRoute::GetPointLocation(const int32& PointIndex) const

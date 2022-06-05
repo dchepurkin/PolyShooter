@@ -18,7 +18,21 @@ void APSGameModeBase::StartFirstLevel()
 
 void APSGameModeBase::StartNextLevel()
 {
+	DisablePlayerCharacter();
+
 	StartLevel(NextLevelName);
+}
+
+void APSGameModeBase::DisablePlayerCharacter()
+{
+	const auto Controller = PSUtils::GetPlayerController(GetWorld());
+	if(!Controller) return;
+
+	const auto Pawn = Controller->GetPawn();
+	if(!Pawn) return;
+	
+	Pawn->TurnOff();
+	Pawn->DisableInput(nullptr);
 }
 
 void APSGameModeBase::ToMenu()

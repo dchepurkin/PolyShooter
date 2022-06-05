@@ -18,7 +18,6 @@ public:
 
 	void OnDeath();
 	void SetPlayerLifes(const int32 NewLifeAmount);
-	void SaveAmmoData(const TMap<TSubclassOf<APSWeaponBase>, FAmmoData>& PlayerAmmoData);
 	void StartGame();
 
 	UFUNCTION(BlueprintCallable)
@@ -33,9 +32,16 @@ protected:
 
 private:
 	int32 CurrentLifes = 0;
-	/*UFUNCTION()
-	void BeginLoadingScreen(const FString& MapName);*/
+	TMap<TSubclassOf<APSWeaponBase>, FAmmoData> Weapons;
+	
+	UFUNCTION()
+	void PreOpenLevel(const FString& MapName);
 
 	UFUNCTION()
 	void OnOpenLevel(UWorld* World);
+
+	void SaveWeaponInfo();
+	void LoadWeaponInfo();
 };
+
+

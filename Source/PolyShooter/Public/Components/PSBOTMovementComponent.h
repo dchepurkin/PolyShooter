@@ -14,13 +14,13 @@ class POLYSHOOTER_API UPSBOTMovementComponent : public UCharacterMovementCompone
 	GENERATED_BODY()
 
 public:
-	const FVector& GetPointLocation(const int32& PointIndex) const;
+	FVector GetNextPointLocation();
 
 protected:
 	virtual void BeginPlay() override;
 
 	UPROPERTY(EditInstanceOnly, BlueprintReadOnly, Category=PSCharacter)
-	APSRoute* RouteInstance;
+	APSRoute* RouteInstance = nullptr;
 
 private:
 	int32 CurrentRoutePoint = 0;

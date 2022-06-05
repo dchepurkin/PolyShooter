@@ -7,6 +7,7 @@
 #include "PSBOTHealthBarWidget.h"
 #include "PSBOTMovementComponent.h"
 #include "PSHealthComponent.h"
+#include "PSLevelGameModeBase.h"
 #include "PSWeaponComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "Components/WidgetComponent.h"
@@ -49,6 +50,9 @@ void APSAICharacter::OnDeath()
 		AIController->BrainComponent->Cleanup();
 		AIController->Destroy();
 	}
+
+	if(GetWorld() && GetWorld()->GetAuthGameMode<APSLevelGameModeBase>())
+		GetWorld()->GetAuthGameMode<APSLevelGameModeBase>()->OnBotDead();
 }
 
 void APSAICharacter::InitHealhBar()

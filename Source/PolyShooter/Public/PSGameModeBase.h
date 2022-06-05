@@ -28,4 +28,5 @@ protected:
 
 private:
 	void StartLevel(const FName& LevelName);
+	void DisablePlayerCharacter();
 };

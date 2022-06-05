@@ -46,6 +46,8 @@ void APSDoorBase::BeginPlay()
 void APSDoorBase::OnBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex,
                                  bool bFromSweep, const FHitResult& SweepResult)
 {
+	if(CantOpen) return;
+	
 	const auto Pawn = Cast<APawn>(OtherActor);
 	if(!Pawn || !Pawn->IsPlayerControlled()) return;
 	

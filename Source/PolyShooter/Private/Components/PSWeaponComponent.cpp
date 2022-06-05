@@ -66,6 +66,8 @@ void UPSWeaponComponent::SpawnWeapons()
 
 void UPSWeaponComponent::SpawnNewWeapon(TSubclassOf<APSWeaponBase> WeaponClass, int32 ClipsAmount)
 {
+	if(!WeaponClass) return;
+
 	const auto CharacterBase = GetOwner<APSCharacterBase>();
 	if(!GetWorld() || !CharacterBase || !CharacterBase->GetMainMesh()) return;
 
@@ -220,4 +222,24 @@ void UPSWeaponComponent::GetAnimData(FWeaponAnimData& AnimData) const
 void UPSWeaponComponent::GetUIData(FWeaponUIData& WeaponUIData) const
 {
 	if(CurrentWeapon) WeaponUIData = CurrentWeapon->GetWeaponUIData();
+}
+
+TMap<TSubclassOf<APSWeaponBase>, FAmmoData> UPSWeaponComponent::GetWeaponInfo() const
+{
+	TMap<TSubclassOf<APSWeaponBase>, FAmmoData> Result;
+
+	for(const auto Weapon : Weapons)
+	{
+		if(Weapon && !Weapon->GetAmmoData().IsInfinite && Weapon->GetAmmoData().Clips)
+			Result.Add(Weapon->GetClass(), Weapon->GetAmmoData());
+	}
+	return Result;
+}
+
+void UPSWeaponComponent::LoadWeaponInfo(TMap<TSubclassOf<APSWeaponBase>, FAmmoData>& WeaponsInfo)
+{
+	for(const auto WeaponInfo : WeaponsInfo)
+	{
+		SpawnNewWeapon(WeaponInfo.Key, WeaponInfo.Value.Clips);
+	}
 }

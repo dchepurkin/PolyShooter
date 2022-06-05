@@ -22,7 +22,7 @@ public:
 
 protected:
 	virtual void BeginPlay() override;
-
+	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category=PSRoute)
 	USplineComponent* SplineComponent;
 };
